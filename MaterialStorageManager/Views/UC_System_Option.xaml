@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="MaterialStorageManager.Views.UC_System_Option"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MaterialStorageManager.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ViewModels="clr-namespace:MaterialStorageManager.ViewModels"            
+             mc:Ignorable="d" 
+             d:DesignHeight="553" d:DesignWidth="960" Foreground="Black" Background="AliceBlue" >
+
+    <UserControl.DataContext>
+        <ViewModels:System_Option_ViewModel/>
+    </UserControl.DataContext>
+    <Grid Height="550">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="Azure">
+            <StackPanel Margin="5 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                <materialDesign:PackIcon Kind="Adjust" VerticalAlignment="Center" Width="32" Height="32" Foreground="Black"/>
+                <TextBlock Text="Configuration Common Fields : " FontSize="32" Foreground="Black"/>
+            </StackPanel>
+            <Separator VerticalAlignment="Bottom" />
+        </Grid>
+
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+            <materialDesign:PackIcon Kind="Robot" Foreground="{Binding ElementName=txt_EqpName, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
+            <TextBlock Text=" Equipment ID   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_EqpName, Path=BorderBrush}"/>
+            <TextBox x:Name ="txt_EqpName" Text="{Binding EqpName}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Name" Width="150" HorizontalAlignment="Center" TextAlignment="Center" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <materialDesign:PackIcon Kind="Language" Foreground="{Binding ElementName=cmb_lan, Path=BorderBrush}" VerticalAlignment="Center" Width="20" Height="20" />
+            <TextBlock Text=" Language   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=cmb_lan, Path=BorderBrush}" />
+            <ComboBox Name="cmb_lan" Width="150" FontSize="12"    
+                      ItemsSource="{Binding Languages}"
+                      SelectedItem="{Binding Language}"
+                      IsEditable="true"     
+                      Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
+                      Margin="0 8 0 8"
+                      Foreground="Black"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+            <materialDesign:PackIcon Kind="Network" Foreground="{Binding ElementName=txt_ACSIP, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
+            <TextBlock Text=" ACS IP   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_ACSIP, Path=BorderBrush}"/>
+            <TextBox x:Name ="txt_ACSIP" Text="{Binding MplusIP}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Network IP" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+            <materialDesign:PackIcon Kind="NetworkStrength0" Foreground="{Binding ElementName=txt_ACSPort, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
+            <TextBlock Text=" ACS Port   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_ACSPort, Path=BorderBrush}"/>
+            <TextBox x:Name ="txt_ACSPort" Text="{Binding MplusPort}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Port Number" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="5" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
+            <materialDesign:PackIcon Kind="Network" Foreground="{Binding ElementName=txt_VecIP, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
+            <TextBlock Text=" AIV IP   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_VecIP, Path=BorderBrush}"/>
+            <TextBox x:Name ="txt_VecIP" Text="{Binding VecIP}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Network IP" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

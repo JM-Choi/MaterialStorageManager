@@ -4,9 +4,165 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MaterialStorageManager"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+        xmlns:ViewModel="clr-namespace:MaterialStorageManager.ViewModels"
+        mc:Ignorable="d" Height="768" Width="1024" Foreground="White" WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <ViewModel:MainWindowViewModel/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <Storyboard x:Key="MenuOpen" >
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grd_Menu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="60" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="220" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="MenuClose" >
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grd_Menu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="220" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="60" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_OpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_CloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    
+    <DockPanel x:Name="Dock_Main" >
+        <Grid DockPanel.Dock="Left" x:Name="grd_Menu" Width="60" HorizontalAlignment="Left" Background="#FF1B3861">
+            <StackPanel x:Name="pnl_Menu">            
+                <Grid Height="60" Background="White" >
+                    <Image Width="200" Height="42" Grid.Row="0" Source="Resource/Logo.jpg" Margin="5" Stretch="Uniform" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Grid>
+                <Grid Height="100" Background="White" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btn_CloseMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="{Binding CloseMenuVisibillity}"
+                            Command="{Binding BtnMenuClose}" Grid.ColumnSpan="2" Margin="0,20">
+                        <materialDesign:PackIcon Foreground="#FF1B3861" Kind="ArrowLeft" Width="25" Height="25" />                        
+                    </Button>
+                    <Button x:Name="btn_OpenMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="{Binding OpenMenuVisibillity}" 
+                            Command="{Binding BtnMenuOpen}" Grid.ColumnSpan="2" Margin="0,20" >
+                        <materialDesign:PackIcon Foreground="#FF1B3861" Kind="Menu" Width="32" Height="32" />                        
+                    </Button>
+                </Grid>                
+                <StackPanel>
+                    
+                    <ListBox x:Name="DemoItemsListBox" SelectedIndex="-1" Background="Transparent"
+                             ItemsSource="{Binding MenuItem}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel Width="500">
+                                    <materialDesign:PackIcon Width="30" Height="30" Kind="{Binding Icon}" HorizontalAlignment="Center" Margin="10,10" Foreground="WhiteSmoke"/>
+                                    <Expander x:Name="MenuExpander" Header="{Binding Header}" Background="Transparent" FontWeight="Bold" Foreground="WhiteSmoke" Margin="-26,0,1,0"
+                                              Visibility="{Binding Path=DataContext.ExpanderMenuVisibillity, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">                                        
+                                        <ListBox x:Name="DemoSubItemsListBox" SelectedIndex="0"
+                                                 ItemsSource="{Binding SubItems}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <WrapPanel>
+                                                        <materialDesign:PackIcon Width="20" Height="20" Kind="{Binding Icon}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="WhiteSmoke"/>
+                                                        <TextBlock x:Name="MenuName" Text="{Binding Name}" Width="400" Foreground="WhiteSmoke" Margin="10,0,0,0">
+                                                            <i:Interaction.Triggers>
+                                                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.BtnMainChange, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                                                                                           CommandParameter="{Binding Screen}" />
+                                                                </i:EventTrigger>
+                                                                <i:EventTrigger EventName="MouseLeftButtonUp">
+                                                                    <i:InvokeCommandAction Command="{Binding Path=DataContext.BtnMainChange, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                                                                                           CommandParameter="{Binding Screen}" />
+                                                                </i:EventTrigger>
+                                                            </i:Interaction.Triggers>                                                            
+                                                        </TextBlock>
+                                                    </WrapPanel>                                                    
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Expander>                                    
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid Background="WhiteSmoke">
+            <ScrollViewer Margin="0,0,-16,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="60*"/>
+                        <RowDefinition Height="550*"/>
+                        <RowDefinition Height="150*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Name="grd_Top" Background="#FF1368B6" Height="60">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="55*"/>
+                            <RowDefinition Height="5*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Left" Width="130">
+                                <TextBlock Name="txt_Time" Text="00:00:00" FontSize="13" Height="25" TextAlignment="Center"/>
+                                <TextBlock Name="txt_Ver" Text="" FontSize="13" Height="25" TextAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Solder Ball Storage" FontSize="22"/>
+                            </StackPanel>
+
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <StackPanel Name="pnl_Dev_0" Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <GridSplitter Width="5" Background="#FF1368B6"/>
+                                <StackPanel Name="pnl_Dev_1" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center" Width="70" />
+
+
+                                <GridSplitter Width="5" Background="#FF1368B6"/>
+
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Name="txt_LoginGrade" Text="------" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" />
+                                    <TextBlock Name="txt_LoginID" Text="------" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" />
+                                </StackPanel>
+
+                                <materialDesign:PopupBox Name="btn_Popup" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
+                                    <StackPanel Width="150">
+                                        <Button x:Name="Btn_Popup"  Content="LogIn" Tag="0"/>
+                                        <Button  Content="LogOut" Tag="1"/>
+                                        <Button  Content="Account" Tag="2"/>
+                                        <Button  Content="Save" Tag="3"/>
+                                        <Separator />
+                                        <Button  Content="ShutDown" Tag="4"/>
+                                    </StackPanel>
+                                </materialDesign:PopupBox>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Label Name="lbl_Lmp" VerticalAlignment="Center" Background="#FF9AEC0A" />
+                        </Grid>
+                    </Grid>
+
+
+                    <Grid Grid.Row="1" Height="550" >
+                        <ContentControl Name="pnl_Main" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding UserControl}"/>                        
+                    </Grid>
+                    <Grid Grid.Row="2" Name="grd_Btm" DockPanel.Dock="Bottom" Height="150" VerticalAlignment="Bottom" Background="#FFC7CACF" >
+                        <StackPanel x:Name="pnl_Btm" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </DockPanel>
+
+
 </Window>
