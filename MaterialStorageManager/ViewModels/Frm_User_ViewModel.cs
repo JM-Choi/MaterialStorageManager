@@ -15,6 +15,9 @@ namespace MaterialStorageManager.ViewModels
 
         public USERINFO userinfo;
         Models.MainSequence mainSequence = Models.MainSequence.Inst;
+        MsgBox msgBox = MsgBox.Inst;
+        public Action CloseAction { get; set; }
+
         public Frm_User_ViewModel()
         {
             userinfo = _Data.Inst.user;
@@ -26,7 +29,7 @@ namespace MaterialStorageManager.ViewModels
             switch(obj)
             {
                 case "btn_Go":
-                    var user = userinfo.LogIn(userName, passWord);
+                    var user = userinfo.LogIn(UserName, PassWord);
                     if (string.IsNullOrEmpty(user.msg))
                     {
                         //Evt_UpdateUser?.Invoke(this, user);
@@ -34,10 +37,11 @@ namespace MaterialStorageManager.ViewModels
                     }
                     else
                     {
-                        var rtn = MsgBox.ShowDialog(user.msg, MsgType.Warn, eBTNSTYLE.OK);
+                        var rtn = msgBox.ShowDialog(user.msg, MsgType.Warn, eBTNSTYLE.OK);
                     }
                     break;
                 case "btn_Exit":
+                    CloseAction();
                     break;
             }
         }

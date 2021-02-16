@@ -10,16 +10,12 @@
              FontFamily="Segoe UI Emoji"
              Title="frm_User" Height="329" Width="242" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" WindowStyle="None" AllowsTransparency="True" Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
 
-    <Window.DataContext>
-        <ViewModels:Frm_User_ViewModel/>
-    </Window.DataContext>
-
     <Grid x:Name="MainGrid">
         <Rectangle Fill="#FFA6A6A8" HorizontalAlignment="Left" Height="294" Margin="12,11,0,0" Stroke="Black" VerticalAlignment="Top" Width="217" RadiusY="22.526" RadiusX="22.526"/>
         <Rectangle x:Name="MainRectangle" Fill="#FFF4F4F5" HorizontalAlignment="Left" Height="299" Margin="3,19,0,0" Stroke="White" VerticalAlignment="Top" Width="216" RadiusY="22.526" RadiusX="22.526"/>
         <Grid x:Name="LoginGrid" Margin="3,69,-3,17" Visibility="Visible">
-            <TextBox x:Name="txt_username" FontSize="15" materialDesign:HintAssist.Hint="User" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"  Margin="26,41,50,155"/>
-            <TextBox x:Name="txt_password" FontSize="15" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" Margin="26,95,50,98"/>
+            <TextBox x:Name="txt_username" FontSize="15" materialDesign:HintAssist.Hint="User" Text="{Binding UserName}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"  Margin="26,41,50,155"/>
+            <TextBox x:Name="txt_password" FontSize="15" materialDesign:HintAssist.Hint="Password" Text="{Binding PassWord}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" Margin="26,95,50,98"/>
             <Rectangle Fill="#FF2192D3" HorizontalAlignment="Left" Height="48" VerticalAlignment="Top" Width="9"/>
             <TextBlock x:Name="lbl_Title"  Text="LOGIN" HorizontalAlignment="Left" Height="48" TextWrapping="Wrap" VerticalAlignment="Top" Width="128" FontSize="30" FontWeight="Bold" Margin="14,0,0,0"/>
             <Rectangle Fill="#FF5B5B5B" HorizontalAlignment="Left" Height="2" VerticalAlignment="Top" Width="152" Margin="26,88,0,0"/>

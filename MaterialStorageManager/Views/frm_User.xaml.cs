@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialStorageManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,10 @@ namespace MaterialStorageManager.Views
         public frm_User()
         {
             InitializeComponent();
+            Frm_User_ViewModel vm = new Frm_User_ViewModel();
+            this.DataContext = vm;
+            if (vm.CloseAction == null)
+                vm.CloseAction = new Action(() => this.Close());
         }
     }
 }

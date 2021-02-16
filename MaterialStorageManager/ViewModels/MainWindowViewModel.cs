@@ -18,6 +18,7 @@ namespace MaterialStorageManager.ViewModels
         public ICommand BtnMenuOpen { get; set; }
         public ICommand BtnMenuClose { get; set; }
         public ICommand BtnMainChange { get; set; }
+        public ICommand BtnPopUp { get; set; }
 
         Models.MainSequence mainSequence = Models.MainSequence.Inst;
 
@@ -26,6 +27,7 @@ namespace MaterialStorageManager.ViewModels
             BtnMenuOpen = new Command(OpenMethod, CanExecuteMethod);
             BtnMenuClose = new Command(CloseMethod, CanExecuteMethod);
             BtnMainChange = new Command(MainChangeMethod, CanExecuteMethod);
+            BtnPopUp = new Command(PopUpMethod);
 
             MenuItem = new[]
             {
@@ -44,6 +46,18 @@ namespace MaterialStorageManager.ViewModels
                     })
             };
 
+        }
+
+        private void PopUpMethod(object obj)
+        {
+            eBTN_POPUP btn = (eBTN_POPUP)Convert.ToInt32(obj);
+            frm_User user;
+            switch (btn)
+            {
+                case eBTN_POPUP.LogIn:
+                    user = new frm_User();
+                    break;
+            }
         }
 
         public SubItem[] subItem { get;}

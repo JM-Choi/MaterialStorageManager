@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using static MaterialStorageManager.Utils.MsgBox;
 
 namespace MaterialStorageManager.Utils
 {
@@ -469,6 +470,13 @@ namespace MaterialStorageManager.Utils
     public class VIEWIOLIST
     {
         public List<IOSRC> ioSRC = new List<IOSRC>();
+    }
+
+    public class MSGBOXDATA
+    {
+        public string message = string.Empty;
+        public MsgType msgType = MsgType.Info;
+        public eBTNSTYLE btnStyle = eBTNSTYLE.OK;
     }
     #endregion
 }

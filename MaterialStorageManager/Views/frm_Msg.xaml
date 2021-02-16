@@ -4,9 +4,68 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaterialStorageManager.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             mc:Ignorable="d"
+             Title="frm_Msg" Height="{Binding Window_Height}" MaxHeight="1024" Width="645" AllowsTransparency="true" WindowStyle="None" Background="{x:Null}" WindowStartupLocation="CenterScreen">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding Path=CmdWindowLoaded}" CommandParameter="{Binding LineCount, ElementName=txb_msg}"/>            
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard>
+                <Storyboard FillBehavior="HoldEnd" AutoReverse="False">
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Grid>
-            
+        <Grid x:Name="gBody" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" MinHeight="145" />
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Border Background="White" CornerRadius="10" Grid.RowSpan="2" Margin="0,2,0,0" >
+            </Border>
+            <TextBox Name="txb_msg" TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Message}" Margin="10,50,10,5" FontSize="30" TextAlignment="Center" ScrollViewer.CanContentScroll="True" 
+                     VerticalScrollBarVisibility="Auto" Background="{Binding MsgBackGround}" Foreground="{Binding MsgForeGround}">
+            </TextBox>
+
+            <Grid x:Name="grd_BtnPnl" Grid.Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="161*" />
+                    <ColumnDefinition Width="161*" />
+                    <ColumnDefinition Width="161*" />
+                    <ColumnDefinition Width="161*" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btn_OK" Grid.Column="{Binding OK_Column}" Grid.ColumnSpan="{Binding OK_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding OK_Visibility}"
+                    Background="#FF4B4747" Foreground="White" Grid.Row="{Binding OK_Row}" Uid="1" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_OK}" Width="150"/>
+
+                <Button x:Name="btn_CANCEL" Grid.Column="{Binding Cancel_Column}" Grid.ColumnSpan="{Binding Cancel_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Cancel_Visibility}"
+                    Background="#FF4B4747" Foreground="White" Grid.Row="{Binding Cancel_Row}" Uid="2" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_CANCEL}" Width="150"/>
+
+                <Button x:Name="btn_RETRY" Grid.Column="{Binding Retry_Column}" Grid.ColumnSpan="{Binding Retry_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Retry_Visibility}"
+                    Background="#FF4B4747" Foreground="White" Grid.Row="{Binding Retry_Row}" Uid="3" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_RETRY}" Width="150"/>
+
+                <Button x:Name="btn_IGNORE" Grid.Column="{Binding Ignore_Column}" Grid.ColumnSpan="{Binding Ignore_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Ignore_Visibility}"
+                    Background="#FF4B4747" Foreground="White" Grid.Row="{Binding Ignore_Row}" Uid="4" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_IGNORE}" Width="150"/>
+            </Grid>
+        </Grid>
+
+        <Grid Cursor="Hand" x:Name="gBar" Height="30" VerticalAlignment="Top">
+            <Border Background="#FFE4E0E0" CornerRadius="10 10 0 0" >
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <materialDesign:PackIcon x:Name="icon_Title" Foreground="#FF1B3861" Kind="{Binding Icon_Kind}" Width="25" Height="25" />
+                    <TextBlock Name="txt_Time" FontWeight="Bold" Text="{Binding CurrentTime}" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+            <Button x:Name="btn_CLOSE" Content="X" Style="{StaticResource BtnClose}" HorizontalAlignment="Right" Width="58" 
+                    VerticalAlignment="Top" Background="#FFDE5454" Foreground="White" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_CANCEL}"/>
+        </Grid>
     </Grid>
 </Window>

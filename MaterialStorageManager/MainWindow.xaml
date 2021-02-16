@@ -137,7 +137,7 @@
 
                                 <materialDesign:PopupBox Name="btn_Popup" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                                     <StackPanel Width="150">
-                                        <Button x:Name="Btn_Popup"  Content="LogIn" Tag="0"/>
+                                        <Button x:Name="Btn_Popup" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_Popup}" Content="LogIn" Tag="0"/>
                                         <Button  Content="LogOut" Tag="1"/>
                                         <Button  Content="Account" Tag="2"/>
                                         <Button  Content="Save" Tag="3"/>
