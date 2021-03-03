@@ -80,6 +80,7 @@ namespace MaterialStorageManager.Utils
             OnEventMsgBoxData?.Invoke(this, msgBoxData);
 
             //msgBox.SetTskProc(true);
+            msgBox.Topmost = true;
             msgBox.ShowDialog();
             //msgBox.SetTskProc();
             return btnRlt;

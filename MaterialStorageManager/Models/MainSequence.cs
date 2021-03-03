@@ -51,6 +51,7 @@ namespace MaterialStorageManager.Models
         public event EventHandler<CONFIG> OnEventViewOptionList;
         public event EventHandler<PIO> OnEventViewPIOList;
         public event EventHandler<LAMPINFO> OnEventViewLampList;
+        public event EventHandler<USER> OnEventUpdateUser;
 
         //string stateURL = "http://ptsv2.com/t/hvmuv-1604648300/post";
         //string stateURL = "http://ptsv2.com/t/j2glg-1603952070/post";
@@ -81,7 +82,7 @@ namespace MaterialStorageManager.Models
         public VIEWIOLIST viewIOList = new VIEWIOLIST();
         public bool Send = false;
         public bool ThreadFlag = true;
-
+        public eVIWER CurrentView = eVIWER.Manual;
         string[] ran_materialname = { "Alcohol", "Methanol", "HydrogenPeroxide", "Dextrose" };
         string[] ran_materiallot = { "LAC01S", "TUH20HH", "QWE123", "ASX009", "POK39JE" };
 
@@ -361,7 +362,7 @@ namespace MaterialStorageManager.Models
                 case "IO":
                     OnEventViewIOList?.Invoke(this, viewIOList);
                     break;
-                case "TwrLmp":
+                case "TowerLamp":
                     OnEventViewLampList?.Invoke(this, _sys.lmp);
                     break;
                 case "Goal":
@@ -371,6 +372,39 @@ namespace MaterialStorageManager.Models
                     break;
                 case "Option":
                     OnEventViewOptionList?.Invoke(this, _sys.cfg);
+                    break;
+            }
+            CurrentView = (eVIWER)Enum.Parse(typeof(eVIWER), UC_Name);
+        }
+
+        public void UpdateUserData(USER userData)
+        {
+            OnEventUpdateUser?.Invoke(this, userData);
+        }
+
+        public void TowerLampData(TWRLAMPUID uid, eEQPSATUS state)
+        {
+            var val = _sys.lmp.GetLmp(state);
+            switch (uid)
+            {
+                case TWRLAMPUID.GREEN_OFF:                    
+                case TWRLAMPUID.GREEN_ON:
+                case TWRLAMPUID.GREEN_BLINK:
+                    val.Green = (TWRLAMP)((int)uid % 10);
+                    break;
+                case TWRLAMPUID.YELLOW_OFF:
+                case TWRLAMPUID.YELLOW_ON:
+                case TWRLAMPUID.YELLOW_BLINK:
+                    val.Yellow = (TWRLAMP)((int)uid % 10);
+                    break;
+                case TWRLAMPUID.RED_OFF:
+                case TWRLAMPUID.RED_ON:
+                case TWRLAMPUID.RED_BLINK:
+                    val.Red = (TWRLAMP)((int)uid % 10);
+                    break;
+                case TWRLAMPUID.BUZZER_OFF:
+                case TWRLAMPUID.BUZZER_ON:
+                    val.Buzzer = ((int)uid % 10) == 0 ? false : true;
                     break;
             }
         }

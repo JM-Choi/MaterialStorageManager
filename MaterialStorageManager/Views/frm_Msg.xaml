@@ -8,11 +8,11 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              mc:Ignorable="d"
              Title="frm_Msg" Height="{Binding Window_Height}" MaxHeight="1024" Width="645" AllowsTransparency="true" WindowStyle="None" Background="{x:Null}" WindowStartupLocation="CenterScreen">
-    <i:Interaction.Triggers>
+    <!--<i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding Path=CmdWindowLoaded}" CommandParameter="{Binding LineCount, ElementName=txb_msg}"/>            
         </i:EventTrigger>
-    </i:Interaction.Triggers>
+    </i:Interaction.Triggers>-->
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
             <BeginStoryboard>
@@ -32,7 +32,12 @@
             <Border Background="White" CornerRadius="10" Grid.RowSpan="2" Margin="0,2,0,0" >
             </Border>
             <TextBox Name="txb_msg" TextWrapping="Wrap" FontWeight="Bold" Text="{Binding Message}" Margin="10,50,10,5" FontSize="30" TextAlignment="Center" ScrollViewer.CanContentScroll="True" 
-                     VerticalScrollBarVisibility="Auto" Background="{Binding MsgBackGround}" Foreground="{Binding MsgForeGround}">
+                     VerticalScrollBarVisibility="Auto" Background="{Binding MsgBackGround}" Foreground="{Binding MsgForeGround}" IsReadOnly="True">                
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding CmdWindowLoaded}" CommandParameter="{Binding LineCount, ElementName=txb_msg}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
             </TextBox>
 
             <Grid x:Name="grd_BtnPnl" Grid.Row="1" >
@@ -66,6 +71,11 @@
             </Border>
             <Button x:Name="btn_CLOSE" Content="X" Style="{StaticResource BtnClose}" HorizontalAlignment="Right" Width="58" 
                     VerticalAlignment="Top" Background="#FFDE5454" Foreground="White" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_CANCEL}"/>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <i:InvokeCommandAction Command="{Binding Path=CmdBarMouseDown}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </Grid>
     </Grid>
 </Window>

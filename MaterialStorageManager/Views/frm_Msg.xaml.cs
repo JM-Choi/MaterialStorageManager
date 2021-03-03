@@ -28,6 +28,8 @@ namespace MaterialStorageManager.Views
             this.DataContext = vm;
             if (vm.CloseAction == null)
                 vm.CloseAction = new Action(() => this.Close());
+            if (vm.DragMoveAction == null)
+                vm.DragMoveAction = new Action(() => DragMove());
         }
     }
 }

@@ -8,17 +8,19 @@ using MaterialStorageManager.Utils;
 
 namespace MaterialStorageManager.ViewModels
 {
-    class System_TwrLmp_ViewModel : Notifier
+    class System_TowerLamp_ViewModel : Notifier
     {
         Models.MainSequence mainSequence = Models.MainSequence.Inst;
         public ICommand ListBox_SelectedItem_Changed { get; set; }
+        public ICommand Radiobutton_Changed { get; set; }
 
         int twrLmp_SelectedItem = 0;
 
-        public System_TwrLmp_ViewModel()
+        public System_TowerLamp_ViewModel()
         {
             mainSequence.OnEventViewLampList += OnEventViewLampList;
             ListBox_SelectedItem_Changed = new Command(ExecuteMethod, CanExecuteMethod);
+            Radiobutton_Changed = new Command(Radiobutton_Changed_Method);
 
             SubItems = new[]
             {
@@ -33,6 +35,14 @@ namespace MaterialStorageManager.ViewModels
             };
         }
 
+        private void Radiobutton_Changed_Method(object obj)
+        {
+            TWRLAMPUID twruid = (TWRLAMPUID)(Convert.ToInt32(obj));
+            eEQPSATUS state = (eEQPSATUS)(Convert.ToInt32(twrLmp_SelectedItem));
+            mainSequence.TowerLampData(twruid, state);
+            
+        }
+
         private bool CanExecuteMethod(object arg)
         {
             return true;
@@ -43,7 +53,7 @@ namespace MaterialStorageManager.ViewModels
             if ((int)obj > -1)
             {
                 twrLmp_SelectedItem = (int)obj;
-                mainSequence.ViewDataUpdate(null, "TwrLmp");
+                mainSequence.ViewDataUpdate(null, "TowerLamp");
             }
         }
 

@@ -21,10 +21,10 @@ namespace MaterialStorageManager.Views
     /// </summary>
     public partial class frm_User : Window
     {
-        public frm_User()
+        public frm_User(bool bCreateAccount = false)
         {
             InitializeComponent();
-            Frm_User_ViewModel vm = new Frm_User_ViewModel();
+            Frm_User_ViewModel vm = new Frm_User_ViewModel(bCreateAccount);
             this.DataContext = vm;
             if (vm.CloseAction == null)
                 vm.CloseAction = new Action(() => this.Close());

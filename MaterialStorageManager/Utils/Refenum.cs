@@ -114,6 +114,21 @@ namespace MaterialStorageManager.Utils
         ON,
         BLINK
     }
+    
+    public enum TWRLAMPUID : int
+    {
+        GREEN_OFF,
+        GREEN_ON,
+        GREEN_BLINK,
+        YELLOW_OFF = 10,
+        YELLOW_ON,
+        YELLOW_BLINK,
+        RED_OFF = 20,
+        RED_ON,
+        RED_BLINK,
+        BUZZER_OFF = 30,
+        BUZZER_ON,
+    }
 
     public enum eDATAEXCHANGE
     {

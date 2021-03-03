@@ -17,12 +17,14 @@ namespace MaterialStorageManager.ViewModels
     {
         public ICommand CmdWindowLoaded { get; set; }
         public ICommand CmdButtonClick { get; set; }
+        public ICommand CmdBarMouseDown { get; set; }
 
         MsgBox msgBox = MsgBox.Inst;
         MsgType type;
         public eBTNSTYLE btnStyle { get; set; }
 
         public Action CloseAction { get; set; }
+        public Action DragMoveAction { get; set; }
 
         DispatcherTimer tmrUpdate, tmrTskProc;
         DateTime createTime;
@@ -31,7 +33,20 @@ namespace MaterialStorageManager.ViewModels
         {
             CmdWindowLoaded = new Command(WindowLoaded);
             CmdButtonClick = new Command(ButtonClick);
+            CmdBarMouseDown = new Command(BarMouseDown);
             msgBox.OnEventMsgBoxData += OnEventMsgBoxData;
+        }
+
+        private void BarMouseDown(object obj)
+        {
+            try
+            {
+                DragMoveAction();
+            }
+            catch
+            {
+
+            }
         }
 
         private void ButtonClick(object obj)

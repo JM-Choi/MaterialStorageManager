@@ -152,7 +152,7 @@
                             
                             <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="IdCardOutline" Height="15" Width="15" VerticalAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text=" OPER. NAME : " FontSize="15" Foreground="Black"/>
+                                <TextBlock Text=" OPER. : " FontSize="15" Foreground="Black"/>
                                 <TextBlock x:Name="txt_PROVOperName" Text="{Binding ProvOperName}" FontSize="15" Foreground="Black"/>
                             </StackPanel>
 
@@ -164,7 +164,7 @@
 
                             <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="ImageText" Height="15" Width="15" VerticalAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text=" MTR NAME : " FontSize="15" Foreground="Black"/>
+                                <TextBlock Text=" MTR : " FontSize="15" Foreground="Black"/>
                                 <TextBlock x:Name="txt_PROVMTRName" Text="{Binding ProvMTRName}" FontSize="15" Foreground="Black"/>
                             </StackPanel>
 
@@ -201,7 +201,7 @@
 
                             <StackPanel Grid.Row="10" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="IdCardOutline" Height="15" Width="15" VerticalAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text=" OPER. NAME : " FontSize="15" Foreground="Black"/>
+                                <TextBlock Text=" OPER. : " FontSize="15" Foreground="Black"/>
                                 <TextBlock x:Name="txt_RecvOperName" Text="{Binding RecvOperName}" FontSize="15" Foreground="Black"/>
                             </StackPanel>
 
@@ -213,7 +213,7 @@
 
                             <StackPanel Grid.Row="12" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="ImageText" Height="15" Width="15" VerticalAlignment="Center" Foreground="Black"/>
-                                <TextBlock Text=" MTR NAME : " FontSize="15" Foreground="Black"/>
+                                <TextBlock Text=" MTR : " FontSize="15" Foreground="Black"/>
                                 <TextBlock x:Name="txt_RecvMTRName" Text="{Binding RecvMTRName}" FontSize="15" Foreground="Black"/>
                             </StackPanel>
 

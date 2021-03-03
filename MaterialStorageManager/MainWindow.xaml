@@ -7,11 +7,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
         xmlns:ViewModel="clr-namespace:MaterialStorageManager.ViewModels"
-        mc:Ignorable="d" Height="768" Width="1024" Foreground="White" WindowStartupLocation="CenterScreen">
-
-    <Window.DataContext>
-        <ViewModel:MainWindowViewModel/>
-    </Window.DataContext>
+        mc:Ignorable="d" Height="768" Width="1024" WindowStyle="None" Foreground="White" WindowStartupLocation="CenterScreen">
     
     <Window.Resources>
         <Storyboard x:Key="MenuOpen" >
@@ -52,7 +48,7 @@
                     <Button x:Name="btn_CloseMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="{Binding CloseMenuVisibillity}"
                             Command="{Binding BtnMenuClose}" Grid.ColumnSpan="2" Margin="0,20">
                         <materialDesign:PackIcon Foreground="#FF1B3861" Kind="ArrowLeft" Width="25" Height="25" />                        
-                    </Button>
+                    </Button>                    
                     <Button x:Name="btn_OpenMenu" Width="60" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" VerticalAlignment="Center" HorizontalAlignment="Right" Visibility="{Binding OpenMenuVisibillity}" 
                             Command="{Binding BtnMenuOpen}" Grid.ColumnSpan="2" Margin="0,20" >
                         <materialDesign:PackIcon Foreground="#FF1B3861" Kind="Menu" Width="32" Height="32" />                        
@@ -75,7 +71,7 @@
                                                     <WrapPanel>
                                                         <materialDesign:PackIcon Width="20" Height="20" Kind="{Binding Icon}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="WhiteSmoke"/>
                                                         <TextBlock x:Name="MenuName" Text="{Binding Name}" Width="400" Foreground="WhiteSmoke" Margin="10,0,0,0">
-                                                            <i:Interaction.Triggers>
+                                                            <i:Interaction.Triggers>                                                                
                                                                 <i:EventTrigger EventName="MouseLeftButtonDown">
                                                                     <i:InvokeCommandAction Command="{Binding Path=DataContext.BtnMainChange, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
                                                                                                            CommandParameter="{Binding Screen}" />
@@ -131,18 +127,18 @@
                                 <GridSplitter Width="5" Background="#FF1368B6"/>
 
                                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock Name="txt_LoginGrade" Text="------" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" />
-                                    <TextBlock Name="txt_LoginID" Text="------" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" />
+                                    <TextBlock Name="txt_LoginGrade" Text="{Binding LoginGrade}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" />
+                                    <TextBlock Name="txt_LoginID" Text="{Binding LoginID}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" />
                                 </StackPanel>
 
                                 <materialDesign:PopupBox Name="btn_Popup" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False">
                                     <StackPanel Width="150">
-                                        <Button x:Name="Btn_Popup" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_Popup}" Content="LogIn" Tag="0"/>
-                                        <Button  Content="LogOut" Tag="1"/>
-                                        <Button  Content="Account" Tag="2"/>
-                                        <Button  Content="Save" Tag="3"/>
+                                        <Button x:Name="Btn_Login" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_Login}" Content="LogIn" Tag="0"/>
+                                        <Button x:Name="Btn_Logout" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_Logout}" Content="LogOut" Tag="1"/>
+                                        <Button x:Name="Btn_Account" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_Account}" Content="Account" Tag="2"/>
+                                        <Button x:Name="Btn_Save" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_Save}" Content="Save" Tag="3"/>
                                         <Separator />
-                                        <Button  Content="ShutDown" Tag="4"/>
+                                        <Button x:Name="Btn_ShutDown" Command="{Binding BtnPopUp}" CommandParameter="{Binding Tag, ElementName=Btn_ShutDown}" Content="ShutDown" Tag="4"/>
                                     </StackPanel>
                                 </materialDesign:PopupBox>
                             </StackPanel>
@@ -150,6 +146,11 @@
                         <Grid Grid.Row="1">
                             <Label Name="lbl_Lmp" VerticalAlignment="Center" Background="#FF9AEC0A" />
                         </Grid>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDown">
+                                <i:InvokeCommandAction Command="{Binding BarMouseDown}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </Grid>
 
 

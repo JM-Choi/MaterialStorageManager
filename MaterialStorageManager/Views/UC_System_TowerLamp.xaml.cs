@@ -18,9 +18,9 @@ namespace MaterialStorageManager.Views
     /// <summary>
     /// UC_System_TwrLmp.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class UC_System_TwrLmp : UserControl
+    public partial class UC_System_TowerLamp : UserControl
     {
-        public UC_System_TwrLmp()
+        public UC_System_TowerLamp()
         {
             InitializeComponent();
         }

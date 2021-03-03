@@ -19,8 +19,14 @@ namespace MaterialStorageManager.ViewModels
         public ICommand BtnMenuClose { get; set; }
         public ICommand BtnMainChange { get; set; }
         public ICommand BtnPopUp { get; set; }
+        public ICommand BarMouseDown { get; set; }
 
         Models.MainSequence mainSequence = Models.MainSequence.Inst;
+        MsgBox msgBox = MsgBox.Inst;
+        private Logger _log = Logger.Inst;
+
+        public Action DragMoveAction { get; set; }
+        public Action CloseMenuAction { get; set; }
 
         public MainWindowViewModel()
         {
@@ -28,6 +34,7 @@ namespace MaterialStorageManager.ViewModels
             BtnMenuClose = new Command(CloseMethod, CanExecuteMethod);
             BtnMainChange = new Command(MainChangeMethod, CanExecuteMethod);
             BtnPopUp = new Command(PopUpMethod);
+            BarMouseDown = new Command(MouseDownMethod);
 
             MenuItem = new[]
             {
@@ -39,7 +46,7 @@ namespace MaterialStorageManager.ViewModels
                 new ItemMenu(ePAGE.System, PackIconKind.Pencil, Visibility.Collapsed, subItem = new[]
                     {
                         new SubItem( eVIWER.IO, PackIconKind.Toolbox, new UC_System_IO()),
-                        new SubItem( eVIWER.TowerLamp, PackIconKind.Lamps, new UC_System_TwrLmp()),
+                        new SubItem( eVIWER.TowerLamp, PackIconKind.Lamps, new UC_System_TowerLamp()),
                         new SubItem( eVIWER.Goal, PackIconKind.Target, new UC_System_Goal()),
                         new SubItem( eVIWER.PIO, PackIconKind.NetworkInterfaceCard, new UC_System_PIO()),
                         new SubItem( eVIWER.Option, PackIconKind.Settings, new UC_System_Option())
@@ -48,17 +55,158 @@ namespace MaterialStorageManager.ViewModels
 
         }
 
+        private void MouseDownMethod(object obj)
+        {
+            DragMoveAction();
+        }
+
+        frm_User user;
         private void PopUpMethod(object obj)
         {
             eBTN_POPUP btn = (eBTN_POPUP)Convert.ToInt32(obj);
-            frm_User user;
             switch (btn)
             {
                 case eBTN_POPUP.LogIn:
-                    user = new frm_User();
+                case eBTN_POPUP.Account:
+                    user = new frm_User(btn == eBTN_POPUP.LogIn);
+                    if (btn == eBTN_POPUP.LogIn)
+                    {
+                        mainSequence.OnEventUpdateUser += On_UpdateUser;
+                    }
+                    user.Topmost = true;
+                    user.ShowDialog();
+                    if (btn == eBTN_POPUP.LogIn)
+                    {
+                        mainSequence.OnEventUpdateUser -= On_UpdateUser;
+                    }
+                    break;
+                case eBTN_POPUP.LogOut:
+                    switch (mainSequence.CurrentView)
+                    {
+                        case eVIWER.Monitor: case eVIWER.Manual: break;
+                        default:
+                            if (false == mainSequence._sysStatus.bDebug)
+                            {
+                                switch (mainSequence._sysStatus._UserGrade)
+                                {
+                                    case eOPRGRADE.Operator: break;
+                                    default: MainChangeMethod(MenuItem[0].SubItems[0].Screen); break;
+                                }
+                            }
+                            else
+                            {
+                                MainChangeMethod(MenuItem[0].SubItems[0].Screen);
+                            }
+                            break;
+                    }
+                    CloseMethod(null);
+                    CloseMenuAction();
+                    SetLoginUser(new USER(), true);
+                    break;
+                case eBTN_POPUP.ConfigSave:
+                    switch (mainSequence.CurrentView)
+                    {
+                        case eVIWER.None: // 모델데이터를 저장 시 추가 코딩필요.                            
+                            _Data.Inst.MdlSave(mainSequence._sysStatus.currMdlFile);
+                            _log.Write(CmdLogType.prdt, $"Model Data를 저장합니다. [{mainSequence._sysStatus.currMdlFile}]");
+                            break;
+                        default: _Data.Inst.SysSave(); break;
+                    }
+                    break;
+                case eBTN_POPUP.Shutdown:
+                    Helper.ShowBlurEffectAllWindow();
+                    var rtn = msgBox.ShowDialog($"Application을 종료하시겠습니까?", MsgBox.MsgType.Info, MsgBox.eBTNSTYLE.OK_CANCEL);
+                    switch (rtn)
+                    {
+                        case MsgBox.eBTNTYPE.OK:
+                            _Finalize();
+                            break;
+                        default: Helper.StopBlurEffectAllWindow(); break;
+                    }
                     break;
             }
+
         }
+
+        private void _Finalize()
+        {
+            Application.Current.Shutdown();
+        }
+
+
+        private void On_UpdateUser(object sender, USER user)
+        {
+            SetLoginUser(user);
+            //BTN_Status(mainCtrl._EQPStatus);
+        }
+
+        public void SetLoginUser(USER user, bool bIsLogOut = false)
+        {
+            if (false == bIsLogOut)
+            {
+                mainSequence._sysStatus.User_Set(user);
+                LoginGrade = user.grade.ToString();
+                LoginID = user.id;
+                Logger.Inst.Write(CmdLogType.prdt, $"작업자가 로그인 하였습니다. [{user.grade}/{user.id}]");
+            }
+            else
+            {
+                Logger.Inst.Write(CmdLogType.prdt, $"작업자가 로그아웃 하였습니다. [{mainSequence._sysStatus._UserGrade}/{mainSequence._sysStatus.user.id}]");
+                mainSequence._sysStatus.User_Set(null, true);
+                LoginGrade = LoginID = $"------";
+                //BTN_Status(mainCtrl._EQPStatus);
+            }
+        }
+
+        //private void BTN_Status(eEQPSATUS status)
+        //{
+        //    var grade = mainCtrl._sysStatus._UserGrade;
+        //    switch (status)
+        //    {
+        //        case eEQPSATUS.Init:
+        //        case eEQPSATUS.Stop:
+        //            btn_OpenMenu.IsEnabled = true;
+        //            btn_CloseMenu.IsEnabled = true;
+        //            btn_Popup.IsEnabled = true;
+        //            if (false == mainCtrl._sysStatus.bDebug)
+        //            {
+        //                switch (grade)
+        //                {
+        //                    case eOPRGRADE.Maintenance:
+        //                    case eOPRGRADE.Maker:
+        //                    case eOPRGRADE.Master:
+        //                        usctrl_Dash.IsEnabled = true;
+        //                        usctrl_Sys.IsEnabled = true;
+        //                        break;
+        //                    default: usctrl_Sys.IsEnabled = false; break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                usctrl_Sys.IsEnabled = true;
+        //            }
+        //            break;
+        //        case eEQPSATUS.Idle:
+        //        case eEQPSATUS.Run:
+        //        case eEQPSATUS.Stopping:
+        //        case eEQPSATUS.Error:
+        //        case eEQPSATUS.EMG:
+        //            switch (status)
+        //            {
+        //                case eEQPSATUS.Idle:
+        //                case eEQPSATUS.Run:
+        //                    Btn_CloseMenu_Click(this, new RoutedEventArgs());
+        //                    break;
+        //                default: break;
+        //            }
+        //            btn_Popup.IsEnabled = false;
+        //            usctrl_Dash.IsEnabled = false;
+        //            usctrl_Sys.IsEnabled = false;
+        //            btn_OpenMenu.IsEnabled = false;
+        //            btn_CloseMenu.IsEnabled = false;
+        //            break;
+        //    }
+        //}
 
         public SubItem[] subItem { get;}
         ItemMenu[] menuitem;
@@ -116,6 +264,34 @@ namespace MaterialStorageManager.ViewModels
         private bool CanExecuteMethod(object arg)
         {
             return true;
+        }
+
+        string logingrade = $"------";
+        public string LoginGrade
+        {
+            get
+            {
+                return logingrade;
+            }
+            set
+            {
+                logingrade = value;
+                OnPropertyChanged();
+            }
+        }
+
+        string loginid = $"------";
+        public string LoginID
+        {
+            get
+            {
+                return loginid;
+            }
+            set
+            {
+                loginid = value;
+                OnPropertyChanged();
+            }
         }
 
         Visibility openMenuVisibillity = Visibility.Visible;

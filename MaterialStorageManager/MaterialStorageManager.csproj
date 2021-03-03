@@ -82,6 +82,7 @@
     <Compile Include="Models\MainSequence.cs" />
     <Compile Include="Utils\Command.cs" />
     <Compile Include="Utils\Data.cs" />
+    <Compile Include="Utils\Helper.cs" />
     <Compile Include="Utils\ItemMenu.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\MsgBox.cs" />
@@ -99,7 +100,7 @@
     <Compile Include="ViewModels\System_IO_ViewModel.cs" />
     <Compile Include="ViewModels\System_Option_ViewModel.cs" />
     <Compile Include="ViewModels\System_PIO_ViewModel.cs" />
-    <Compile Include="ViewModels\System_TwrLmp_ViewModel.cs" />
+    <Compile Include="ViewModels\System_TowerLamp_ViewModel.cs" />
     <Compile Include="ViewModels\UsCtrl_MenuItem_ViewModel.cs" />
     <Compile Include="Views\frm_InputBox.xaml.cs">
       <DependentUpon>frm_InputBox.xaml</DependentUpon>
@@ -131,8 +132,8 @@
     <Compile Include="Views\UC_System_PIO.xaml.cs">
       <DependentUpon>UC_System_PIO.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UC_System_TwrLmp.xaml.cs">
-      <DependentUpon>UC_System_TwrLmp.xaml</DependentUpon>
+    <Compile Include="Views\UC_System_TowerLamp.xaml.cs">
+      <DependentUpon>UC_System_TowerLamp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UsCtrl_MenuItem.xaml.cs">
       <DependentUpon>UsCtrl_MenuItem.xaml</DependentUpon>
@@ -189,7 +190,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UC_System_TwrLmp.xaml">
+    <Page Include="Views\UC_System_TowerLamp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
