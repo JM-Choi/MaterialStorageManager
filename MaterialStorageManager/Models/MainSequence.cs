@@ -404,7 +404,55 @@ namespace MaterialStorageManager.Models
                     break;
                 case TWRLAMPUID.BUZZER_OFF:
                 case TWRLAMPUID.BUZZER_ON:
-                    val.Buzzer = ((int)uid % 10) == 0 ? false : true;
+                    val.Buzzer = 30 == (int)uid ? false : true;
+                    break;
+            }
+        }
+
+        public void OptionData(OPTIONUID uid, object data)
+        {
+            var cfg = _sys.cfg;
+
+            switch (uid)
+            {
+                case OPTIONUID.EQPNAME:
+                    cfg.eqpName = data.ToString();
+                    break;
+                case OPTIONUID.LANGUAGE:
+                    cfg.language = (eLANGUAGE)data;
+                    break;
+                case OPTIONUID.MPLUSIP:
+                    cfg.mplusIP = data.ToString();
+                    break;
+                case OPTIONUID.MPLUSPORT:
+                    cfg.mplusPort = Convert.ToInt32(data);
+                    break;
+                case OPTIONUID.VECIP:
+                    cfg.VecIP = data.ToString();
+                    break;
+            }
+        }
+
+        public void PIOData(PIOUID uid, int data)
+        {
+            var pio = _sys.cfg.pio;
+
+            switch (uid)
+            {
+                case PIOUID.PIO_0:
+                    pio.nInterfaceTimeout = data;
+                    break;
+                case PIOUID.PIO_1:
+                    pio.nDockSenChkTime = data;
+                    break;
+                case PIOUID.PIO_2:
+                    pio.nFeedTimeOut_Start = data;
+                    break;
+                case PIOUID.PIO_3:
+                    pio.nFeedTimeOut_Work = data;
+                    break;
+                case PIOUID.PIO_4:
+                    pio.nFeedTimeOut_End = data;
                     break;
             }
         }

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MaterialStorageManager.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:ViewModels="clr-namespace:MaterialStorageManager.ViewModels"            
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              mc:Ignorable="d" 
              d:DesignHeight="553" d:DesignWidth="960" Foreground="Black" Background="AliceBlue" >
 
@@ -40,37 +41,68 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="Robot" Foreground="{Binding ElementName=txt_EqpName, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" Equipment ID   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_EqpName, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_EqpName" Text="{Binding EqpName}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Name" Width="150" HorizontalAlignment="Center" TextAlignment="Center" />
+            <TextBox x:Name ="txt_EqpName" Uid="0" Text="{Binding EqpName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Name" Width="150" HorizontalAlignment="Center" TextAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.OptionData, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_EqpName}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+            
         </StackPanel>
 
         <StackPanel Grid.Row="2" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
             <materialDesign:PackIcon Kind="Language" Foreground="{Binding ElementName=cmb_lan, Path=BorderBrush}" VerticalAlignment="Center" Width="20" Height="20" />
             <TextBlock Text=" Language   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=cmb_lan, Path=BorderBrush}" />
-            <ComboBox Name="cmb_lan" Width="150" FontSize="12"    
+            <ComboBox Name="cmb_lan" Uid="1" Width="150" FontSize="12"    
                       ItemsSource="{Binding Languages}"
                       SelectedItem="{Binding Language}"
                       IsEditable="true"     
                       Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                       Margin="0 8 0 8"
-                      Foreground="Black"/>
+                      Foreground="Black">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.OptionData, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=cmb_lan}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
         </StackPanel>
 
         <StackPanel Grid.Row="3" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="Network" Foreground="{Binding ElementName=txt_ACSIP, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" ACS IP   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_ACSIP, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_ACSIP" Text="{Binding MplusIP}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Network IP" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black"/>
+            <TextBox x:Name ="txt_ACSIP" Uid="2" Text="{Binding MplusIP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Network IP" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.OptionData, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_ACSIP}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="4" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="NetworkStrength0" Foreground="{Binding ElementName=txt_ACSPort, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" ACS Port   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_ACSPort, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_ACSPort" Text="{Binding MplusPort}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Port Number" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black"/>
+            <TextBox x:Name ="txt_ACSPort" Uid="3" Text="{Binding MplusPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Port Number" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.OptionData, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_ACSPort}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
 
         <StackPanel Grid.Row="5" Grid.Column="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="Network" Foreground="{Binding ElementName=txt_VecIP, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" AIV IP   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_VecIP, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_VecIP" Text="{Binding VecIP}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Network IP" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black"/>
+            <TextBox x:Name ="txt_VecIP" Uid="4" Text="{Binding VecIP, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Network IP" Width="150" HorizontalAlignment="Center" TextAlignment="Center" Foreground="Black">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.OptionData, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_VecIP}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MaterialStorageManager.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:ViewModels="clr-namespace:MaterialStorageManager.ViewModels"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              mc:Ignorable="d" 
              d:DesignHeight="553" d:DesignWidth="960" Foreground="Black">
 
@@ -63,35 +64,65 @@
         <StackPanel Grid.Row="1" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="Timeline" Foreground="{Binding ElementName=txt_PIO_0, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" Waiting time for interface at docking   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_PIO_0, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_PIO_0" Text="{Binding NInterfaceTimeout}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Waiting Time" Width="100" HorizontalAlignment="Center" TextAlignment="Center" />
+            <TextBox x:Name ="txt_PIO_0" Uid="0" Text="{Binding NInterfaceTimeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Waiting Time" Width="100" HorizontalAlignment="Center" TextAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.PIOdata, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_PIO_0}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
             <TextBlock Text="sec" FontSize="15" VerticalAlignment="Bottom" Foreground="{Binding ElementName=txt_PIO_0, Path=BorderBrush}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="AlignVerticalCenter" Foreground="{Binding ElementName=txt_PIO_1, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" Sensor checking time for align at the docking to the machine   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_PIO_1, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_PIO_1" Text="{Binding NDockSenChkTime}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Sensing timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center"/>
+            <TextBox x:Name ="txt_PIO_1" Uid="1" Text="{Binding NDockSenChkTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Sensing timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.PIOdata, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_PIO_1}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
             <TextBlock Text="sec" FontSize="15" VerticalAlignment="Bottom" Foreground="{Binding ElementName=txt_PIO_1, Path=BorderBrush}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="3" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="Transfer" Foreground="{Binding ElementName=txt_PIO_2, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" Checking time for inlet sensor the tray   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_PIO_2, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_PIO_2" Text="{Binding NFeedTimeOut_Start}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center"/>
+            <TextBox x:Name ="txt_PIO_2" Uid="2" Text="{Binding NFeedTimeOut_Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.PIOdata, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_PIO_2}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
             <TextBlock Text="sec" FontSize="15" VerticalAlignment="Bottom" Foreground="{Binding ElementName=txt_PIO_2, Path=BorderBrush}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="4" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="Transfer" Foreground="{Binding ElementName=txt_PIO_3, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" Checking time for material transferring done   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_PIO_3, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_PIO_3" Text="{Binding NFeedTimeOut_Work}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center"/>
+            <TextBox x:Name ="txt_PIO_3" Uid="3" Text="{Binding NFeedTimeOut_Work, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.PIOdata, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_PIO_3}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
             <TextBlock Text="sec" FontSize="15" VerticalAlignment="Bottom" Foreground="{Binding ElementName=txt_PIO_3, Path=BorderBrush}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="5" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" >
             <materialDesign:PackIcon Kind="TimelineAlert" Foreground="{Binding ElementName=txt_PIO_4, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
             <TextBlock Text=" Checking time for interface done   " FontSize="15" VerticalAlignment="Center" Foreground="{Binding ElementName=txt_PIO_4, Path=BorderBrush}"/>
-            <TextBox x:Name ="txt_PIO_4" Text="{Binding NFeedTimeOut_End}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center"/>
+            <TextBox x:Name ="txt_PIO_4" Uid="4" Text="{Binding NFeedTimeOut_End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Timeout" Width="100" HorizontalAlignment="Center" TextAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="TextChanged">
+                        <i:InvokeCommandAction Command="{Binding Path=DataContext.PIOdata, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding Uid, ElementName=txt_PIO_4}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
             <TextBlock Text="sec" FontSize="15" VerticalAlignment="Bottom" Foreground="{Binding ElementName=txt_PIO_4, Path=BorderBrush}"/>
         </StackPanel>
 

@@ -4,15 +4,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MaterialStorageManager.ViewModels
 {
     class System_PIO_ViewModel : Notifier
     {
         Models.MainSequence mainSequence = Models.MainSequence.Inst;
+        public ICommand PIOdata { get; set; }
         public System_PIO_ViewModel()
         {
             mainSequence.OnEventViewPIOList += OnEventViewPIOList;
+            PIOdata = new Command(PIOdataMethod);
+        }
+
+        private void PIOdataMethod(object obj)
+        {
+            var uid = (PIOUID)Convert.ToInt32(obj);
+
+            switch (uid)
+            {
+                case PIOUID.PIO_0:
+                    mainSequence.PIOData(uid, NInterfaceTimeout);
+                    break;
+                case PIOUID.PIO_1:
+                    mainSequence.PIOData(uid, NDockSenChkTime);
+                    break;
+                case PIOUID.PIO_2:
+                    mainSequence.PIOData(uid, NFeedTimeOut_Start);
+                    break;
+                case PIOUID.PIO_3:
+                    mainSequence.PIOData(uid, NFeedTimeOut_Work);
+                    break;
+                case PIOUID.PIO_4:
+                    mainSequence.PIOData(uid, NFeedTimeOut_End);
+                    break;
+            }
         }
 
         private void OnEventViewPIOList(object sender, PIO e)

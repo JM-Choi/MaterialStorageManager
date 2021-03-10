@@ -130,6 +130,24 @@ namespace MaterialStorageManager.Utils
         BUZZER_ON,
     }
 
+    public enum OPTIONUID : int
+    {
+        EQPNAME,
+        LANGUAGE,
+        MPLUSIP,
+        MPLUSPORT,
+        VECIP
+    }
+
+    public enum PIOUID : int
+    {
+        PIO_0,
+        PIO_1,
+        PIO_2,
+        PIO_3,
+        PIO_4
+    }
+
     public enum eDATAEXCHANGE
     {
         Load,
