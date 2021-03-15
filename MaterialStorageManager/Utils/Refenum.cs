@@ -1,5 +1,7 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using static MaterialStorageManager.Utils.MsgBox;
 
 namespace MaterialStorageManager.Utils
@@ -400,6 +402,52 @@ namespace MaterialStorageManager.Utils
         MotionBoardNotRecogninzed,
         MaterialDetectedInputLocation,
     }
+
+    public class TreeData : Notifier
+    {
+        private string name;
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string parent;
+        public string Parent
+        {
+            get
+            {
+                return parent;
+            }
+            set
+            {
+                parent = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<TreeData> children = new ObservableCollection<TreeData>();
+        public ObservableCollection<TreeData> Children
+        {
+            get
+            {
+                return children;
+            }
+            set
+            {
+                children = value;
+                OnPropertyChanged();
+            }
+        }
+
+    }
     #endregion
 
     #region Model <-> ViewModel 연동
@@ -510,6 +558,12 @@ namespace MaterialStorageManager.Utils
         public string message = string.Empty;
         public MsgType msgType = MsgType.Info;
         public eBTNSTYLE btnStyle = eBTNSTYLE.OK;
+    }
+
+    public class INPUTBOXDATA
+    {
+        public PackIconKind packIcon;
+        public string title = string.Empty;
     }
     #endregion
 }

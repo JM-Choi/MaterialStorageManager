@@ -37,6 +37,7 @@ namespace MaterialStorageManager.Models
         private SYS _sys;
         private MDL _mdl;
         public SYS_STATUS _sysStatus;
+        private GOALITEM _SelItem = new GOALITEM();
 
         //public XmlControl xmlControl = new XmlControl();
         DateTime DataTime = new DateTime();
@@ -51,6 +52,8 @@ namespace MaterialStorageManager.Models
         public event EventHandler<CONFIG> OnEventViewOptionList;
         public event EventHandler<PIO> OnEventViewPIOList;
         public event EventHandler<LAMPINFO> OnEventViewLampList;
+        public event EventHandler<GOALINFO> OnEventViewGoalList;
+        public event EventHandler<GOALITEM> OnEventViewGoalItemChange;
         public event EventHandler<USER> OnEventUpdateUser;
 
         //string stateURL = "http://ptsv2.com/t/hvmuv-1604648300/post";
@@ -366,6 +369,7 @@ namespace MaterialStorageManager.Models
                     OnEventViewLampList?.Invoke(this, _sys.lmp);
                     break;
                 case "Goal":
+                    OnEventViewGoalList?.Invoke(this, _sys.goals);
                     break;
                 case "PIO":
                     OnEventViewPIOList?.Invoke(this, _sys.cfg.pio);
@@ -455,6 +459,26 @@ namespace MaterialStorageManager.Models
                     pio.nFeedTimeOut_End = data;
                     break;
             }
+        }
+
+        public void TreeViewData(TreeData SelTreeData)
+        {
+            var goaltype = SelTreeData.Parent.ToEnum<eGOALTYPE>();
+            var goalInfo = _sys.goals;
+            _SelItem = goalInfo.Get(goaltype, SelTreeData.Name, true);
+            OnEventViewGoalItemChange?.Invoke(this, _SelItem);
+        }
+
+        public bool GoalAdd(string MsgBoxRlt)
+        {
+            var goals = _sys.goals;
+            return goals.Add(new GOALITEM() { type = _SelItem.type, name = MsgBoxRlt, line = _SelItem.line, label = MsgBoxRlt });
+        }
+
+        public bool GoalDel()
+        {
+            var goals = _sys.goals;
+            return goals.Remove(_SelItem);
         }
         #endregion
 

@@ -124,7 +124,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool green_Off = true;
+        bool green_Off = false;
         public bool Green_Off
         {
             get
@@ -138,7 +138,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool green_On = true;
+        bool green_On = false;
         public bool Green_On
         {
             get
@@ -152,7 +152,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool green_Blink = true;
+        bool green_Blink = false;
         public bool Green_Blink
         {
             get
@@ -166,7 +166,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool yellow_Off = true;
+        bool yellow_Off = false;
         public bool Yellow_Off
         {
             get
@@ -180,7 +180,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool yellow_On = true;
+        bool yellow_On = false;
         public bool Yellow_On
         {
             get
@@ -194,7 +194,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool yellow_Blink = true;
+        bool yellow_Blink = false;
         public bool Yellow_Blink
         {
             get
@@ -208,7 +208,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool red_Off = true;
+        bool red_Off = false;
         public bool Red_Off
         {
             get
@@ -222,7 +222,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool red_On = true;
+        bool red_On = false;
         public bool Red_On
         {
             get
@@ -236,7 +236,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        bool red_Blink = true;
+        bool red_Blink = false;
         public bool Red_Blink
         {
             get

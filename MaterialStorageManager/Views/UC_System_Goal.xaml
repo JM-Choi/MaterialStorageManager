@@ -5,13 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MaterialStorageManager.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"   
-             xmlns:ViewModels="clr-namespace:MaterialStorageManager.ViewModels"          
+             xmlns:ViewModels="clr-namespace:MaterialStorageManager.ViewModels"         
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"  
              mc:Ignorable="d" 
              d:DesignHeight="553" d:DesignWidth="960" Foreground="Black">
 
     <UserControl.DataContext>
         <ViewModels:System_Goal_ViewModel/>
     </UserControl.DataContext>
+    
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -60,7 +62,18 @@
                 ScrollViewer.VerticalScrollBarVisibility="Visible">
 
                 <Grid Grid.Row="0">
-                    <TreeView Name="tree_Goals" Grid.Row="0" MinWidth="220" MaxHeight="490"/>
+                    <TreeView Name="tree_Goals" ItemsSource="{Binding TreeGoals}" Grid.Row="0" MinWidth="220" MaxHeight="490">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock Text="{Binding Name}"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectedItemChanged">
+                                <i:InvokeCommandAction Command="{Binding Path=DataContext.TreeViewSelectedChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding SelectedItem, ElementName=tree_Goals}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TreeView>
                 </Grid>
 
                 <Grid Grid.Row="1">
@@ -72,13 +85,13 @@
                                      Margin="0 0 10 10"
                                      HorizontalAlignment="Right" VerticalAlignment="Bottom">
                         <StackPanel Orientation="Horizontal">
-                            <Button ToolTip="Add an item">
+                            <Button Name="btn_AddItem" ToolTip="Add an item" Command="{Binding AddButtonClick}">
                                 <Path Data="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"
                               Stretch="Uniform"
                               Width="15" Height="15"
                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
                             </Button>
-                            <Button ToolTip="Remove selected item">
+                            <Button Name="btn_RemoveItem" ToolTip="Remove selected item" Command="{Binding DelButtonClick}">
                                 <Path Data="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
                               Stretch="Uniform"
                               Width="15" Height="15"
@@ -106,7 +119,7 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <materialDesign:PackIcon Kind="Adjust" VerticalAlignment="Center" Width="32" Height="32" Foreground="Black"/>
                     <TextBlock Text="Goal Common Fields : " FontSize="32" Foreground="Black"/>
-                    <TextBlock Name="txt_Goalnfo" Text="" FontSize="32" Foreground="Black"/>
+                    <TextBlock Name="txt_Goalnfo" Text="{Binding GoalInfo}" FontSize="32" Foreground="Black"/>
                 </StackPanel>
             </Grid>
 
@@ -121,22 +134,27 @@
                 <StackPanel Grid.Row="0" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                     <materialDesign:PackIcon Kind="Category" Foreground="{Binding ElementName=cmb_LineID, Path=BorderBrush}" VerticalAlignment="Center" Width="20" Height="20" />
 
-                    <ComboBox Name="cmb_LineID" Width="150" FontSize="15"
+                    <ComboBox Name="cmb_LineID" Width="150" FontSize="15" ItemsSource="{Binding Line}" SelectedItem="{Binding LineSel, Mode=TwoWay}"
                               materialDesign:HintAssist.Hint=" Line-ID" 
                               IsEditable="True" 
                               Style="{StaticResource MaterialDesignFloatingHintComboBox}" 
                               Margin="0 8 0 8">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding ComboEvent}" CommandParameter="{Binding SelectedValue, ElementName=cmb_LineID}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                     </ComboBox>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <materialDesign:PackIcon Kind="Network" Foreground="{Binding ElementName=txt_HostName, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
-                    <TextBox x:Name ="txt_HostName" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="MCS Goal Name" Width="150" />
+                    <materialDesign:PackIcon Kind="Network" Foreground="{Binding ElementName=txt_HostName, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20"/>
+                    <TextBox x:Name ="txt_HostName" Text="{Binding HostName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="MCS Goal Name" Width="150"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Margin="20 0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <materialDesign:PackIcon Kind="LabelVariant" Foreground="{Binding ElementName=txt_Label, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20" />
-                    <TextBox x:Name ="txt_Label" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Display UI Name" Width="150" />
+                    <materialDesign:PackIcon Kind="LabelVariant" Foreground="{Binding ElementName=txt_Label, Path=BorderBrush}" VerticalAlignment="Center" Height="20" Width="20"/>
+                    <TextBox x:Name ="txt_Label" Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="Display UI Name" Width="150"/>
                 </StackPanel>
             </Grid>
         </Grid>

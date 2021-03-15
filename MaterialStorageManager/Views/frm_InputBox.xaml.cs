@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialStorageManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,16 @@ namespace MaterialStorageManager.Views
     /// <summary>
     /// frm_InputBox.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class frm_InputBox : UserControl
+    public partial class frm_InputBox
     {
         public frm_InputBox()
         {
             InitializeComponent();
+            Frm_InputBox_ViewModel vm = new Frm_InputBox_ViewModel();
+            this.DataContext = vm;
+
+            if (vm.CloseAction == null)
+                vm.CloseAction = new Action(() => this.Close());
         }
     }
 }

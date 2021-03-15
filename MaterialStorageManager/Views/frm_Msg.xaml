@@ -35,7 +35,7 @@
                      VerticalScrollBarVisibility="Auto" Background="{Binding MsgBackGround}" Foreground="{Binding MsgForeGround}" IsReadOnly="True">                
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="TextChanged">
-                        <i:InvokeCommandAction Command="{Binding CmdWindowLoaded}" CommandParameter="{Binding LineCount, ElementName=txb_msg}"/>
+                        <i:InvokeCommandAction Command="{Binding CmdWindowLoaded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding LineCount, ElementName=txb_msg}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBox>
@@ -51,13 +51,13 @@
                 <Button x:Name="btn_OK" Grid.Column="{Binding OK_Column}" Grid.ColumnSpan="{Binding OK_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding OK_Visibility}"
                     Background="#FF4B4747" Foreground="White" Grid.Row="{Binding OK_Row}" Uid="1" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_OK}" Width="150"/>
 
-                <Button x:Name="btn_CANCEL" Grid.Column="{Binding Cancel_Column}" Grid.ColumnSpan="{Binding Cancel_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Cancel_Visibility}"
+                <Button x:Name="btn_CANCEL" Grid.Column="{Binding Cancel_Column}" Grid.ColumnSpan="{Binding Cancel_ColumnSpan}" Content="CANCEL" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Cancel_Visibility}"
                     Background="#FF4B4747" Foreground="White" Grid.Row="{Binding Cancel_Row}" Uid="2" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_CANCEL}" Width="150"/>
 
-                <Button x:Name="btn_RETRY" Grid.Column="{Binding Retry_Column}" Grid.ColumnSpan="{Binding Retry_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Retry_Visibility}"
+                <Button x:Name="btn_RETRY" Grid.Column="{Binding Retry_Column}" Grid.ColumnSpan="{Binding Retry_ColumnSpan}" Content="RETRY" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Retry_Visibility}"
                     Background="#FF4B4747" Foreground="White" Grid.Row="{Binding Retry_Row}" Uid="3" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_RETRY}" Width="150"/>
 
-                <Button x:Name="btn_IGNORE" Grid.Column="{Binding Ignore_Column}" Grid.ColumnSpan="{Binding Ignore_ColumnSpan}" Content="OK" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Ignore_Visibility}"
+                <Button x:Name="btn_IGNORE" Grid.Column="{Binding Ignore_Column}" Grid.ColumnSpan="{Binding Ignore_ColumnSpan}" Content="IGONRE" Margin="5 5" FontWeight="Bold" Style="{StaticResource BtnDefault}" Visibility="{Binding Ignore_Visibility}"
                     Background="#FF4B4747" Foreground="White" Grid.Row="{Binding Ignore_Row}" Uid="4" Command="{Binding CmdButtonClick}" CommandParameter="{Binding Uid, ElementName=btn_IGNORE}" Width="150"/>
             </Grid>
         </Grid>

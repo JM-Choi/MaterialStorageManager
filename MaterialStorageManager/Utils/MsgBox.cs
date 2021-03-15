@@ -32,11 +32,13 @@ namespace MaterialStorageManager.Utils
         #endregion
 
         public event EventHandler<MSGBOXDATA> OnEventMsgBoxData;
+        public event EventHandler<INPUTBOXDATA> OnEventInputBoxData;
         public enum eBTNSTYLE { OK, OK_CANCEL, OK_CANCEL_RETRY, OK_CANCEL_RETRY_IGNORE }
         public enum eBTNTYPE { OK = 1, CANCEL, Retry, Ignore }
         public enum MsgType { Info, Warn, Error, }
 
         public eBTNTYPE btnRlt { get; set; }
+        public string content { get; set; }
 
         public eBTNTYPE Show(string msg)
         {
@@ -86,13 +88,19 @@ namespace MaterialStorageManager.Utils
             return btnRlt;
         }
 
-        //public (eBTNTYPE rtn, string rlt) ShowInputBoxDlg(PackIconKind icon, string title)
-        //{
-        //    frm_InputBox box = new frm_InputBox(icon, title);
-        //    box.Topmost = true;
-        //    box.ShowDialog();
-        //    return (box._BtnRlt, box._Content);
-        //}
+        public (eBTNTYPE rtn, string rlt) ShowInputBoxDlg(PackIconKind icon, string title)
+        {
+            frm_InputBox box = new frm_InputBox();
+            INPUTBOXDATA inputBoxData = new INPUTBOXDATA
+            {
+                packIcon = icon,
+                title = title
+            };
+            OnEventInputBoxData?.Invoke(this, inputBoxData);
+            box.Topmost = true;
+            box.ShowDialog();
+            return (btnRlt, content);
+        }
 
         public void CloseAllMsgBox()
         {
