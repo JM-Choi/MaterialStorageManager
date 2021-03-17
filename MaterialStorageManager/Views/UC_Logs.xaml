@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="MaterialStorageManager.Views.UC_Logs"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MaterialStorageManager.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:ViewModels="clr-namespace:MaterialStorageManager.ViewModels"         
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"  
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="964">
+    <UserControl.DataContext>
+        <ViewModels:Logs_ViewModel/>
+    </UserControl.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="120*"/>
+        </Grid.RowDefinitions>
+
+        <ListBox x:Name="lst_Logs" Grid.Row="0" Style="{StaticResource MaterialDesignToolToggleListBox}" SelectedIndex="0" ItemsSource="{Binding LogTypeItems}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding Path=DataContext.ListBoxSelChanged, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding SelectedIndex, ElementName=lst_Logs}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="{Binding Icon}"/>
+                        <TextBlock Text="{Binding Text}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel Grid.Row="1" x:Name="pnl_LogItem" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="960">
+            <ContentControl Content="{Binding UserControl}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

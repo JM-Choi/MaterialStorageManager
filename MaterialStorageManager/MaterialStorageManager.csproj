@@ -13,7 +13,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
+    <Deterministic>false</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
@@ -88,13 +88,14 @@
     <Compile Include="Utils\MsgBox.cs" />
     <Compile Include="Utils\Notifier.cs" />
     <Compile Include="Utils\Refenum.cs" />
-    <Compile Include="Utils\SubItem.cs" />
     <Compile Include="ViewModels\DashBoard_Manual_ViewModel.cs" />
     <Compile Include="ViewModels\DashBoard_Monitor_ViewModel.cs" />
     <Compile Include="ViewModels\Frm_InputBox_ViewModel.cs" />
     <Compile Include="ViewModels\Frm_Msg_ViewModel.cs" />
     <Compile Include="ViewModels\Frm_Noti_ViewModel.cs" />
     <Compile Include="ViewModels\Frm_User_ViewModel.cs" />
+    <Compile Include="ViewModels\LogItem_ViewModel.cs" />
+    <Compile Include="ViewModels\Logs_ViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\System_Goal_ViewModel.cs" />
     <Compile Include="ViewModels\System_IO_ViewModel.cs" />
@@ -119,6 +120,12 @@
     </Compile>
     <Compile Include="Views\UC_DashBoard_Monitor.xaml.cs">
       <DependentUpon>UC_DashBoard_Monitor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_LogItem.xaml.cs">
+      <DependentUpon>UC_LogItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_Logs.xaml.cs">
+      <DependentUpon>UC_Logs.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UC_System_Goal.xaml.cs">
       <DependentUpon>UC_System_Goal.xaml</DependentUpon>
@@ -171,6 +178,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UC_DashBoard_Monitor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_LogItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_Logs.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

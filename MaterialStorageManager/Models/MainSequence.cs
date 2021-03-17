@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.IO;
 using System.Diagnostics;
 using System.Windows.Controls;
+using System.Collections.Concurrent;
 
 namespace MaterialStorageManager.Models
 {
@@ -32,7 +33,8 @@ namespace MaterialStorageManager.Models
                 return instance;
             }
         }
-
+        #endregion
+        private Logger _log = Logger.Inst;
         private _Data _data = _Data.Inst._data;
         private SYS _sys;
         private MDL _mdl;
@@ -41,7 +43,6 @@ namespace MaterialStorageManager.Models
 
         //public XmlControl xmlControl = new XmlControl();
         DateTime DataTime = new DateTime();
-        #endregion
 
         public event EventHandler<MMSTATUSGROUP> OnEventMMState;
         public event EventHandler<APIRECVDATA> OnEventJobState;
@@ -55,6 +56,7 @@ namespace MaterialStorageManager.Models
         public event EventHandler<GOALINFO> OnEventViewGoalList;
         public event EventHandler<GOALITEM> OnEventViewGoalItemChange;
         public event EventHandler<USER> OnEventUpdateUser;
+        public event EventHandler<LogMsg> OnEventLogs;
 
         //string stateURL = "http://ptsv2.com/t/hvmuv-1604648300/post";
         //string stateURL = "http://ptsv2.com/t/j2glg-1603952070/post";
@@ -92,20 +94,38 @@ namespace MaterialStorageManager.Models
         ServerResp serverRESP = new ServerResp();
 
         public DispatcherOperation SendDispatcher;
+        public Thread thMsgAdder;
+        private ConcurrentQueue<LogMsg> m_quLogMsg = new ConcurrentQueue<LogMsg>();
+        public string Version = string.Empty;
 
         public MainSequence()
         {
+            System.Version assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            DateTime bulidDate = new DateTime(2000, 1, 1).AddDays(assemblyVersion.Build).AddSeconds(assemblyVersion.Revision * 2);
+            Version = "Ver. " + bulidDate.ToString("yyyy-MM-dd");
             _sys = _Data.Inst.sys;
             _mdl = _Data.Inst.mdl;
             _sysStatus = _Data.Inst.sys.status;
             viewIOList.ioSRC = _sys.io.lst;
+            Logger.Inst.MakeSrcHdl($"MFC");
+            _log.OnWriteLog += _Log_OnMsg;
             //xmlControl.Load();
             SendDispatcher = Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
-            {
-                StateSendThread();
-            }
-                    );
+                {
+                    StateSendThread();
+                }
+            );
 
+            thMsgAdder = new Thread(msgAddProcess)
+            {
+                IsBackground = true
+            };
+        }
+
+        public void DisignLoadComp()
+        {
+            thMsgAdder.Start();
+            _log.Write(CmdLogType.prdt, $"Application을 시작합니다. [{Version}]");
         }
 
 
@@ -346,6 +366,51 @@ namespace MaterialStorageManager.Models
         #endregion
 
         #region View
+
+        private void _Log_OnMsg(object sender, WriteLogArgs e)
+        {
+            LogMsg msg = new LogMsg() { logUsr = e.type, msg = e.msg };
+            m_quLogMsg.Enqueue(msg);
+        }
+
+        private bool isThRun = true;
+        private void msgAddProcess()
+        {
+            while (isThRun)
+            {
+                if (m_quLogMsg.Count > 0)
+                {
+                    LogMsg temp = new LogMsg();
+                    if (!m_quLogMsg.TryDequeue(out temp))
+                    {
+                        Thread.Sleep(1);
+                        continue;
+                    }
+                    if (temp == null) { return; }
+
+                    if (temp.msg.IndexOf("\r") < 0)
+                    {
+                        temp.msg += "\r";
+                    }
+                    if (temp.msg.IndexOf("\n") < 0)
+                    {
+                        temp.msg += "\n";
+                    }
+
+                    try
+                    {
+                        OnEventLogs?.Invoke(this, temp);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Write(false, $"{e.ToString()}\r\n");
+                    }
+                }
+                Thread.Sleep(5);
+            }
+            isThRun = false;
+        }
+    
         public void ViewDataUpdate(UserControl userControl, string ucname = "")
         {
             string UC_Name = string.Empty;

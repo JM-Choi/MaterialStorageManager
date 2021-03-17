@@ -53,6 +53,7 @@ namespace MaterialStorageManager.ViewModels
                     })
             };
 
+            mainSequence.DisignLoadComp();
         }
 
         private void MouseDownMethod(object obj)
@@ -110,7 +111,10 @@ namespace MaterialStorageManager.ViewModels
                             _Data.Inst.MdlSave(mainSequence._sysStatus.currMdlFile);
                             _log.Write(CmdLogType.prdt, $"Model Data를 저장합니다. [{mainSequence._sysStatus.currMdlFile}]");
                             break;
-                        default: _Data.Inst.SysSave(); break;
+                        default:
+                            _Data.Inst.SysSave();
+                            _log.Write(CmdLogType.prdt, $"Config Data를 저장합니다. [{_Data.Inst.sys.status.user.grade}/{_Data.Inst.sys.status.user.id}]");
+                            break;
                     }
                     break;
                 case eBTN_POPUP.Shutdown:
@@ -130,6 +134,7 @@ namespace MaterialStorageManager.ViewModels
 
         private void _Finalize()
         {
+            _log.Write(CmdLogType.prdt, $"Application을 종료합니다. [{mainSequence.Version}]");
             Application.Current.Shutdown();
         }
 
@@ -137,7 +142,6 @@ namespace MaterialStorageManager.ViewModels
         private void On_UpdateUser(object sender, USER user)
         {
             SetLoginUser(user);
-            //BTN_Status(mainCtrl._EQPStatus);
         }
 
         public void SetLoginUser(USER user, bool bIsLogOut = false)
@@ -154,59 +158,8 @@ namespace MaterialStorageManager.ViewModels
                 Logger.Inst.Write(CmdLogType.prdt, $"작업자가 로그아웃 하였습니다. [{mainSequence._sysStatus._UserGrade}/{mainSequence._sysStatus.user.id}]");
                 mainSequence._sysStatus.User_Set(null, true);
                 LoginGrade = LoginID = $"------";
-                //BTN_Status(mainCtrl._EQPStatus);
             }
         }
-
-        //private void BTN_Status(eEQPSATUS status)
-        //{
-        //    var grade = mainCtrl._sysStatus._UserGrade;
-        //    switch (status)
-        //    {
-        //        case eEQPSATUS.Init:
-        //        case eEQPSATUS.Stop:
-        //            btn_OpenMenu.IsEnabled = true;
-        //            btn_CloseMenu.IsEnabled = true;
-        //            btn_Popup.IsEnabled = true;
-        //            if (false == mainCtrl._sysStatus.bDebug)
-        //            {
-        //                switch (grade)
-        //                {
-        //                    case eOPRGRADE.Maintenance:
-        //                    case eOPRGRADE.Maker:
-        //                    case eOPRGRADE.Master:
-        //                        usctrl_Dash.IsEnabled = true;
-        //                        usctrl_Sys.IsEnabled = true;
-        //                        break;
-        //                    default: usctrl_Sys.IsEnabled = false; break;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                usctrl_Sys.IsEnabled = true;
-        //            }
-        //            break;
-        //        case eEQPSATUS.Idle:
-        //        case eEQPSATUS.Run:
-        //        case eEQPSATUS.Stopping:
-        //        case eEQPSATUS.Error:
-        //        case eEQPSATUS.EMG:
-        //            switch (status)
-        //            {
-        //                case eEQPSATUS.Idle:
-        //                case eEQPSATUS.Run:
-        //                    Btn_CloseMenu_Click(this, new RoutedEventArgs());
-        //                    break;
-        //                default: break;
-        //            }
-        //            btn_Popup.IsEnabled = false;
-        //            usctrl_Dash.IsEnabled = false;
-        //            usctrl_Sys.IsEnabled = false;
-        //            btn_OpenMenu.IsEnabled = false;
-        //            btn_CloseMenu.IsEnabled = false;
-        //            break;
-        //    }
-        //}
 
         public SubItem[] subItem { get;}
         ItemMenu[] menuitem;
@@ -236,6 +189,20 @@ namespace MaterialStorageManager.ViewModels
                 OnPropertyChanged();
             }
 
+        }
+
+        UserControl logUserControl = new UC_Logs();
+        public UserControl LogUserControl
+        {
+            get
+            {
+                return logUserControl;
+            }
+            set
+            {
+                logUserControl = value;
+                OnPropertyChanged();
+            }
         }
 
         private void OpenMethod(object obj)

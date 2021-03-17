@@ -52,6 +52,7 @@ namespace MaterialStorageManager.ViewModels
         private void ButtonClick(object obj)
         {
             msgBox.btnRlt = (eBTNTYPE)Convert.ToInt32(obj);
+            tmrUpdate.Stop();
             SetTskProc();
             CloseAction();
         }

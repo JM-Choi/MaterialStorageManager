@@ -13,7 +13,7 @@
     <UserControl.DataContext>
         <ViewModels:DashBoard_Monitor_ViewModel/>
     </UserControl.DataContext>
-    
+
     <UserControl.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -96,7 +96,7 @@
                             <TextBlock Name="txt_AccState" Text="{Binding AccState}" FontSize="20" Foreground="Black"/>
                         </StackPanel>
 
-                        
+
                     </Grid>
                 </GroupBox>
 
@@ -149,7 +149,7 @@
                                 <materialDesign:PackIcon Kind="ArrowUpBold" Height="15" Width="15" VerticalAlignment="Center" Foreground="Black"/>
                                 <TextBlock Text=" PROVIDING" FontSize="15" Foreground="Black"/>
                             </StackPanel>
-                            
+
                             <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
                                 <materialDesign:PackIcon Kind="IdCardOutline" Height="15" Width="15" VerticalAlignment="Center" Foreground="Black"/>
                                 <TextBlock Text=" OPER. : " FontSize="15" Foreground="Black"/>
@@ -277,14 +277,18 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Grid.Row="1" Height="120" Width="180">
-                <Rectangle Height="110" Margin="5" Fill="White" RadiusX="10" RadiusY="10">
+            <Grid Grid.Row="1" Height="120" Width="180" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="11*"/>
+                    <ColumnDefinition Width="7*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Height="110" Margin="5" Fill="White" RadiusX="10" RadiusY="10" Grid.ColumnSpan="2">
                     <Rectangle.Effect>
                         <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
                     </Rectangle.Effect>
                 </Rectangle>
 
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
                     <Grid Height="110" Width="180" >
 
                         <StackPanel Orientation="Horizontal">

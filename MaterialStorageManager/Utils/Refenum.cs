@@ -256,6 +256,12 @@ namespace MaterialStorageManager.Utils
         _25,
         Sharing,
     }
+
+    public class LogMsg
+    {
+        public CmdLogType logUsr;
+        public string msg;
+    }
     #endregion
 
     #region API 통신

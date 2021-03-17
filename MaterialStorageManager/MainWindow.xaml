@@ -158,7 +158,9 @@
                         <ContentControl Name="pnl_Main" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="{Binding UserControl}"/>                        
                     </Grid>
                     <Grid Grid.Row="2" Name="grd_Btm" DockPanel.Dock="Bottom" Height="150" VerticalAlignment="Bottom" Background="#FFC7CACF" >
-                        <StackPanel x:Name="pnl_Btm" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                        <StackPanel x:Name="pnl_Btm" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <ContentControl Content="{Binding LogUserControl}"/>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </ScrollViewer>
