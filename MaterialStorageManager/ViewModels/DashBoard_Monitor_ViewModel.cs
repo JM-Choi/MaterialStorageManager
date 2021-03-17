@@ -16,6 +16,42 @@ namespace MaterialStorageManager.ViewModels
             mainSequence.OnEventMMState += OnEventMMState;
             mainSequence.OnEventProvingData += OnEvnetProvingData;
             mainSequence.OnEventRecvingData += OnEvnetRecvingData;
+            mainSequence.OnEvnetMonitorBtnChange += OnEvnetMonitorBtnChange;
+        }
+
+        private void OnEvnetMonitorBtnChange(object sender, eEQPSATUS e)
+        {
+            BTN_Status(e);
+        }
+
+        private void BTN_Status(eEQPSATUS status)
+        {
+            BtnStartEnable = false;
+            BtnStopEnable = false;
+            BtnResetEnable = false;
+            BtnDropJobEnable = false;
+
+            switch (status)
+            {
+                case eEQPSATUS.Init:
+                case eEQPSATUS.Stop:
+                    BtnStartEnable = true;
+                    BtnResetEnable = true;
+                    break;
+                case eEQPSATUS.Stopping: break;
+                case eEQPSATUS.Idle:
+                case eEQPSATUS.Run:
+                    BtnStopEnable = true;
+                    if (eEQPSATUS.Run == status)
+                    {
+                        BtnDropJobEnable = true;
+                    }
+                    break;
+                case eEQPSATUS.Error:
+                case eEQPSATUS.EMG:
+                    BtnResetEnable = true;
+                    break;
+            }
         }
 
         private void OnEventJobState(object sender, APIRECVDATA e)
@@ -48,6 +84,62 @@ namespace MaterialStorageManager.ViewModels
             RecvExpiry = e.RecvExpiry;
             RecvQTY = e.RecvQTY;
             RecvType = e.RecvType;
+        }
+
+        bool btnStartEnable = true;
+        public bool BtnStartEnable
+        {
+            get
+            {
+                return btnStartEnable;
+            }
+            set
+            {
+                btnStartEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        bool btnStopEnable = true;
+        public bool BtnStopEnable
+        {
+            get
+            {
+                return btnStopEnable;
+            }
+            set
+            {
+                btnStopEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        bool btnResetEnable = true;
+        public bool BtnResetEnable
+        {
+            get
+            {
+                return btnResetEnable;
+            }
+            set
+            {
+                btnResetEnable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        bool btnDropJobEnable = true;
+        public bool BtnDropJobEnable
+        {
+            get
+            {
+                return btnDropJobEnable;
+            }
+            set
+            {
+                btnDropJobEnable = value;
+                OnPropertyChanged();
+            }
         }
 
         string jobID = string.Empty;

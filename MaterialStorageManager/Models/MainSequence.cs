@@ -57,6 +57,7 @@ namespace MaterialStorageManager.Models
         public event EventHandler<GOALITEM> OnEventViewGoalItemChange;
         public event EventHandler<USER> OnEventUpdateUser;
         public event EventHandler<LogMsg> OnEventLogs;
+        public event EventHandler<eEQPSATUS> OnEvnetMonitorBtnChange;
 
         //string stateURL = "http://ptsv2.com/t/hvmuv-1604648300/post";
         //string stateURL = "http://ptsv2.com/t/j2glg-1603952070/post";
@@ -97,7 +98,7 @@ namespace MaterialStorageManager.Models
         public Thread thMsgAdder;
         private ConcurrentQueue<LogMsg> m_quLogMsg = new ConcurrentQueue<LogMsg>();
         public string Version = string.Empty;
-
+        
         public MainSequence()
         {
             System.Version assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -124,10 +125,26 @@ namespace MaterialStorageManager.Models
 
         public void DisignLoadComp()
         {
+            EQPStatus = eEQPSATUS.Init;
             thMsgAdder.Start();
             _log.Write(CmdLogType.prdt, $"Application을 시작합니다. [{Version}]");
         }
-
+        public eEQPSATUS EQPStatus
+        {
+            get
+            {
+                return _sysStatus.eqpState;
+            }
+            set
+            {
+                if (_sysStatus.eqpState != value)
+                {
+                    _log.Write(CmdLogType.prdt, $"설비 상태를 {_sysStatus.eqpState.ToString()}에서 {value.ToString()}로 변경합니다.");
+                }
+                _sysStatus.eqpState = value;
+                OnEvnetMonitorBtnChange?.Invoke(this, _sysStatus.eqpState);
+            }
+        }
 
         #region RestAPI
         public async void StateSendThread()
@@ -545,6 +562,59 @@ namespace MaterialStorageManager.Models
             var goals = _sys.goals;
             return goals.Remove(_SelItem);
         }
+
+        private void BTN_Status(eEQPSATUS status)
+        {
+            var grade = _sysStatus._UserGrade;
+            switch (status)
+            {
+                case eEQPSATUS.Init:
+                case eEQPSATUS.Stop:
+                    //btn_OpenMenu.IsEnabled = true;
+                    //btn_CloseMenu.IsEnabled = true;
+                    //btn_Popup.IsEnabled = true;
+                    if (false == _sysStatus.bDebug)
+                    {
+                        switch (grade)
+                        {
+                            case eOPRGRADE.Maintenance:
+                            case eOPRGRADE.Maker:
+                            case eOPRGRADE.Master:
+                                //usctrl_Dash.IsEnabled = true;
+                                //usctrl_Sys.IsEnabled = true;
+                                break;
+                            default: //usctrl_Sys.IsEnabled = false; 
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        //usctrl_Sys.IsEnabled = true;
+                    }
+                    break;
+                case eEQPSATUS.Idle:
+                case eEQPSATUS.Run:
+                case eEQPSATUS.Stopping:
+                case eEQPSATUS.Error:
+                case eEQPSATUS.EMG:
+                    switch (status)
+                    {
+                        case eEQPSATUS.Idle:
+                        case eEQPSATUS.Run:
+                            //Btn_CloseMenu_Click(this, new RoutedEventArgs());
+                            break;
+                        default: break;
+                    }
+                    //btn_Popup.IsEnabled = false;
+                    //usctrl_Dash.IsEnabled = false;
+                    //usctrl_Sys.IsEnabled = false;
+                    //btn_OpenMenu.IsEnabled = false;
+                    //btn_CloseMenu.IsEnabled = false;
+                    break;
+            }
+        }
+
+
         #endregion
 
     }
