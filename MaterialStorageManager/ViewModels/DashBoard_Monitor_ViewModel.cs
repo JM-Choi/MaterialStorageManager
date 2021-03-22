@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace MaterialStorageManager.ViewModels
 {
     public class DashBoard_Monitor_ViewModel : Notifier
     {
         Models.MainSequence mainSequence = Models.MainSequence.Inst;
+        public ICommand BtnClick { get; set; }
         public DashBoard_Monitor_ViewModel()
         {
             mainSequence.OnEventJobState += OnEventJobState;
@@ -17,6 +19,28 @@ namespace MaterialStorageManager.ViewModels
             mainSequence.OnEventProvingData += OnEvnetProvingData;
             mainSequence.OnEventRecvingData += OnEvnetRecvingData;
             mainSequence.OnEvnetMonitorBtnChange += OnEvnetMonitorBtnChange;
+            BtnClick = new Command(BtnClickMethod);
+        }
+
+        private void BtnClickMethod(object obj)
+        {
+            MONIOTRBTN monitorBtn = (MONIOTRBTN)Convert.ToInt32(obj);
+
+            switch (monitorBtn)
+            {
+                case MONIOTRBTN.START:
+                    mainSequence.EQPStatus = eEQPSATUS.Idle;
+                    break;
+                case MONIOTRBTN.STOP:
+                    mainSequence.EQPStatus = eEQPSATUS.Stop;
+                    break;
+                case MONIOTRBTN.RESET:
+                    mainSequence.EQPStatus = eEQPSATUS.Init;
+                    break;
+                case MONIOTRBTN.DROPJOB:
+                    mainSequence.EQPStatus = eEQPSATUS.Idle;
+                    break;
+            }
         }
 
         private void OnEvnetMonitorBtnChange(object sender, eEQPSATUS e)
@@ -37,6 +61,11 @@ namespace MaterialStorageManager.ViewModels
                 case eEQPSATUS.Stop:
                     BtnStartEnable = true;
                     BtnResetEnable = true;
+                    if (eEQPSATUS.Stop == status)
+                        MSMState = "STOP";
+                    else
+                        MSMState = "INIT";
+
                     break;
                 case eEQPSATUS.Stopping: break;
                 case eEQPSATUS.Idle:
@@ -46,10 +75,12 @@ namespace MaterialStorageManager.ViewModels
                     {
                         BtnDropJobEnable = true;
                     }
+                    MSMState = "START";
                     break;
                 case eEQPSATUS.Error:
                 case eEQPSATUS.EMG:
                     BtnResetEnable = true;
+                    MSMState = "ERROR";
                     break;
             }
         }

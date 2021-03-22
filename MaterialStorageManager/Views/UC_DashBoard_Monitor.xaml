@@ -323,10 +323,10 @@
                     <RowDefinition Height="20*"/>
                 </Grid.RowDefinitions>
 
-                <Button Name="btn_Start" IsEnabled="{Binding BtnStartEnable}" Height="60" Grid.Row="0" Content="_START" Style="{DynamicResource MaterialDesignRaisedDarkButton}" FontSize="25" />
-                <Button Name="btn_Stop" IsEnabled="{Binding BtnStopEnable}" Height="60" Grid.Row="1" Content="_STOP" Style="{DynamicResource MaterialDesignRaisedButton}" FontSize="25"/>
-                <Button Name="btn_Reset" IsEnabled="{Binding BtnResetEnable}" Height="60" Grid.Row="2" Content="_RESET" Style="{DynamicResource MaterialDesignRaisedLightButton}" FontSize="25"/>
-                <Button Name="btn_DropJob" IsEnabled="{Binding BtnDropJobEnable}" Height="70" Grid.Row="3" Content="_DROP JOB" Style="{DynamicResource MaterialDesignRaisedButton}" FontSize="25" Background="#FF3C4961" />
+                <Button Name="btn_Start" IsEnabled="{Binding BtnStartEnable}" Uid="0" Command="{Binding BtnClick}" CommandParameter="{Binding Uid, ElementName=btn_Start}" Height="60" Grid.Row="0" Content="_START" Style="{DynamicResource MaterialDesignRaisedDarkButton}" FontSize="25" />
+                <Button Name="btn_Stop" IsEnabled="{Binding BtnStopEnable}" Uid="1" Command="{Binding BtnClick}" CommandParameter="{Binding Uid, ElementName=btn_Stop}" Height="60" Grid.Row="1" Content="_STOP" Style="{DynamicResource MaterialDesignRaisedButton}" FontSize="25"/>
+                <Button Name="btn_Reset" IsEnabled="{Binding BtnResetEnable}" Uid="2" Command="{Binding BtnClick}" CommandParameter="{Binding Uid, ElementName=btn_Reset}" Height="60" Grid.Row="2" Content="_RESET" Style="{DynamicResource MaterialDesignRaisedLightButton}" FontSize="25"/>
+                <Button Name="btn_DropJob" IsEnabled="{Binding BtnDropJobEnable}" Uid="3" Command="{Binding BtnClick}" CommandParameter="{Binding Uid, ElementName=btn_DropJob}" Height="70" Grid.Row="3" Content="_DROP JOB" Style="{DynamicResource MaterialDesignRaisedButton}" FontSize="25" Background="#FF3C4961" />
             </Grid>
         </Grid>
     </Grid>

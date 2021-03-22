@@ -262,6 +262,14 @@ namespace MaterialStorageManager.Utils
         public CmdLogType logUsr;
         public string msg;
     }
+
+    public enum MONIOTRBTN
+    {
+        START,
+        STOP,
+        RESET,
+        DROPJOB
+    }
     #endregion
 
     #region API 통신
