@@ -34,6 +34,7 @@ namespace MaterialStorageManager.Models
             }
         }
         #endregion
+        MsgBox msgBox = MsgBox.Inst;
         private Logger _log = Logger.Inst;
         private _Data _data = _Data.Inst._data;
         private SYS _sys;
@@ -57,7 +58,8 @@ namespace MaterialStorageManager.Models
         public event EventHandler<GOALITEM> OnEventViewGoalItemChange;
         public event EventHandler<USER> OnEventUpdateUser;
         public event EventHandler<LogMsg> OnEventLogs;
-        public event EventHandler<eEQPSATUS> OnEvnetMonitorBtnChange;
+        public event EventHandler<eEQPSATUS> OnEventMonitorBtnChange;
+        public event EventHandler<int> OnEventMotionCounts;
 
         //string stateURL = "http://ptsv2.com/t/hvmuv-1604648300/post";
         //string stateURL = "http://ptsv2.com/t/j2glg-1603952070/post";
@@ -98,18 +100,11 @@ namespace MaterialStorageManager.Models
         public Thread thMsgAdder;
         private ConcurrentQueue<LogMsg> m_quLogMsg = new ConcurrentQueue<LogMsg>();
         public string Version = string.Empty;
-        
+
+        public int m_IAxisCounts = 0;
         public MainSequence()
         {
-            System.Version assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            DateTime bulidDate = new DateTime(2000, 1, 1).AddDays(assemblyVersion.Build).AddSeconds(assemblyVersion.Revision * 2);
-            Version = "Ver. " + bulidDate.ToString("yyyy-MM-dd");
-            _sys = _Data.Inst.sys;
-            _mdl = _Data.Inst.mdl;
-            _sysStatus = _Data.Inst.sys.status;
-            viewIOList.ioSRC = _sys.io.lst;
-            Logger.Inst.MakeSrcHdl($"MFC");
-            _log.OnWriteLog += _Log_OnMsg;
+            ConfigLoad();
             //xmlControl.Load();
             SendDispatcher = Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                 {
@@ -121,6 +116,37 @@ namespace MaterialStorageManager.Models
             {
                 IsBackground = true
             };
+        }
+
+        public void ConfigLoad()
+        {
+            System.Version assemblyVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            DateTime bulidDate = new DateTime(2000, 1, 1).AddDays(assemblyVersion.Build).AddSeconds(assemblyVersion.Revision * 2);
+            Version = "Ver. " + bulidDate.ToString("yyyy-MM-dd");
+
+            _sys = _Data.Inst.sys;
+            _mdl = _Data.Inst.mdl;
+            _sysStatus = _Data.Inst.sys.status;
+            viewIOList.ioSRC = _sys.io.lst;
+            Logger.Inst.MakeSrcHdl($"MFC");
+            _log.OnWriteLog += _Log_OnMsg;
+        }
+
+        public void AJINEXTEKLoad()
+        {
+            if (AJINLIBRARY.AxlOpen(7) != (uint)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
+            {
+                msgBox.ShowDialog("Intialize Fail..!!", MsgBox.MsgType.Error, MsgBox.eBTNSTYLE.OK);
+                return;
+            }
+
+            if (AJINMOTION.AxmMotLoadParaAll("") != (uint)AXT_FUNC_RESULT.AXT_RT_SUCCESS)
+            {
+                msgBox.ShowDialog("Mot File Not Found.", MsgBox.MsgType.Error, MsgBox.eBTNSTYLE.OK);
+                return;
+            }
+
+            AJINMOTION.AxmInfoGetAxisCount(ref m_IAxisCounts);
         }
 
         public void DisignLoadComp()
@@ -142,7 +168,7 @@ namespace MaterialStorageManager.Models
                     _log.Write(CmdLogType.prdt, $"설비 상태를 {_sysStatus.eqpState.ToString()}에서 {value.ToString()}로 변경합니다.");
                 }
                 _sysStatus.eqpState = value;
-                OnEvnetMonitorBtnChange?.Invoke(this, _sysStatus.eqpState);
+                OnEventMonitorBtnChange?.Invoke(this, _sysStatus.eqpState);
             }
         }
 
@@ -614,7 +640,40 @@ namespace MaterialStorageManager.Models
             }
         }
 
+        public void MotionLogger(int m_IAxisNo)
+        {
+            string logText = string.Empty;
+            uint homeResult = 0;
+            AJINMOTION.AxmHomeGetResult(m_IAxisNo, ref homeResult);
+            logText = TranslateHomeResult(homeResult);
 
+            _log.Write(CmdLogType.prdt, $"Axis No. {m_IAxisNo} : {logText}");
+
+        }
+
+        // ++ =======================================================================
+        // >> TranslateHomeResult(...) : 지정한 원점검색 결과에 해당하는 문자열을 반환
+        //    하는 함수.
+        //  - "AXHS.h"에 정의되어있는 AXT_MOTION_HOME_RESULT 구조체를 기반으로 합니다.
+        // --------------------------------------------------------------------------
+        public string TranslateHomeResult(uint duHomeResult)
+        {
+            string m_strResult = string.Empty;
+            switch (duHomeResult)
+            {
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_SUCCESS:         m_strResult = ("[01H] HOME_SUCCESS"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_SEARCHING:       m_strResult = ("[02H] HOME_SEARCHING"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_GNT_RANGE:   m_strResult = ("[10H] HOME_ERR_GNT_RANGE"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_USER_BREAK:  m_strResult = ("[11H] HOME_ERR_USER_BREAK"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_VELOCITY:    m_strResult = ("[12H] HOME_ERR_VELOCITY"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_AMP_FAULT:   m_strResult = ("[13H] HOME_ERR_AMP_FAULT"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_NEG_LIMIT:   m_strResult = ("[14H] HOME_ERR_NEG_LIMIT"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_POS_LIMIT:   m_strResult = ("[15H] HOME_ERR_POS_LIMIT"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_NOT_DETECT:  m_strResult = ("[16H] HOME_ERR_NOT_DETECT"); break;
+                case (uint)AXT_MOTION_HOME_RESULT.HOME_ERR_UNKNOWN:     m_strResult = ("[FFH] HOME_ERR_UNKNOWN"); break;
+            }
+            return m_strResult;
+        }
         #endregion
 
     }

@@ -35,7 +35,7 @@
                         <i:InvokeCommandAction Command="{Binding Path=DataContext.ListBox_SelectedItem_Changed, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" CommandParameter="{Binding SelectedIndex, ElementName=lst_Status}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-            </ListBox>
+            </ListBox>            
         </Grid>
         
         <Grid Grid.Row="1" Background="AliceBlue">

@@ -52,6 +52,7 @@ namespace MaterialStorageManager.ViewModels
         private void ButtonClick(object obj)
         {
             msgBox.btnRlt = (eBTNTYPE)Convert.ToInt32(obj);
+            Message = string.Empty;
             tmrUpdate.Stop();
             SetTskProc();
             CloseAction();
@@ -67,7 +68,8 @@ namespace MaterialStorageManager.ViewModels
 
         private void WindowLoaded(object obj)
         {
-            Window_Height = (Convert.ToInt32(obj) * 120) + 80;
+            string[] split = Message.Split('\r');
+            Window_Height = (split.Length * 120) + 80;
         }
 
         private void buttonSet()
@@ -137,7 +139,7 @@ namespace MaterialStorageManager.ViewModels
             }
             createTime = DateTime.Now;
             tmrUpdate = new DispatcherTimer();
-            tmrUpdate.Interval = TimeSpan.FromMilliseconds(0.1);    //시간간격 설정
+            tmrUpdate.Interval = TimeSpan.FromMilliseconds(10);    //시간간격 설정
             tmrUpdate.Tick += new EventHandler(Tmr_Tick);           //이벤트 추가    
             tmrUpdate.Start();
 
@@ -169,17 +171,17 @@ namespace MaterialStorageManager.ViewModels
             }
 
             var state = _Data.Inst.sys.status.eqpState;
-            switch (type)
-            {
-                case MsgType.Error:
-                    switch (state)
-                    {
-                        case eEQPSATUS.Error: case eEQPSATUS.EMG: break;
-                        default: msgBox.btnRlt = eBTNTYPE.OK; CloseAction(); break;
-                    }
-                    break;
-                default: break;
-            }
+            //switch (type)
+            //{
+            //    case MsgType.Error:
+            //        switch (state)
+            //        {
+            //            case eEQPSATUS.Error: case eEQPSATUS.EMG: break;
+            //            default: msgBox.btnRlt = eBTNTYPE.OK; CloseAction(); break;
+            //        }
+            //        break;
+            //    default: break;
+            //}
             bTogle ^= true;
         }
 

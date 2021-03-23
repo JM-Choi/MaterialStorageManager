@@ -676,6 +676,9 @@ namespace MaterialStorageManager.Utils
                 GoalsSave(_inst.sys.cfg.language);
             }
             rtn = UserLoad();
+
+            rtn = MotionLoad();
+
             _inst.sys.status.bLoaded = false;
             _inst.sys.status.bDebug = true;
             _inst.sys.status.user.id = string.Empty;
@@ -697,6 +700,7 @@ namespace MaterialStorageManager.Utils
                 IOSave(_inst.sys.cfg.language);
                 GoalsSave(_inst.sys.cfg.language);
                 LmpSave();
+                MotionSave();
             }
             catch (Exception e)
             {
@@ -902,6 +906,51 @@ namespace MaterialStorageManager.Utils
             {
                 Debug.Assert(false, $"{e.ToString()}");
                 return false;
+            }
+            return true;
+        }
+
+        public bool MotionLoad()
+        {
+            bool rtn = true;
+            string path = $"Data\\Motion.xml";
+            try
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    System.IO.FileStream fs4 = new System.IO.FileStream(string.Format(path, Environment.CurrentDirectory), System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    XmlSerializer xs2 = new XmlSerializer(_inst.sys.status.GetType());
+                    var temp = (SYS_STATUS)xs2.Deserialize(fs4);
+                    fs4.Close();
+                    _inst.sys.status = temp;
+                }
+                else
+                {
+                    rtn = false;
+                }
+            }
+            catch (Exception e)
+            {
+                rtn = false;
+                Debug.Assert(false, $"{e.ToString()}");
+            }
+            return rtn;
+        }
+
+        public bool MotionSave()
+        {
+            // xml 형태로 파일 기록            
+            try
+            {
+                string path = $"Data\\Motion.xml";
+                System.IO.FileStream fs3 = new System.IO.FileStream(path, System.IO.FileMode.Create, System.IO.FileAccess.Write);
+                XmlSerializer xs = new XmlSerializer(_inst.sys.status.GetType());
+                xs.Serialize(fs3, _inst.sys.status);
+                fs3.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.Assert(false, $"{e.ToString()}");
             }
             return true;
         }

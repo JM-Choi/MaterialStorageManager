@@ -18,7 +18,7 @@ namespace MaterialStorageManager.ViewModels
             mainSequence.OnEventMMState += OnEventMMState;
             mainSequence.OnEventProvingData += OnEvnetProvingData;
             mainSequence.OnEventRecvingData += OnEvnetRecvingData;
-            mainSequence.OnEvnetMonitorBtnChange += OnEvnetMonitorBtnChange;
+            mainSequence.OnEventMonitorBtnChange += OnEventMonitorBtnChange;
             BtnClick = new Command(BtnClickMethod);
         }
 
@@ -36,6 +36,7 @@ namespace MaterialStorageManager.ViewModels
                     break;
                 case MONIOTRBTN.RESET:
                     mainSequence.EQPStatus = eEQPSATUS.Init;
+                    mainSequence.AJINEXTEKLoad();
                     break;
                 case MONIOTRBTN.DROPJOB:
                     mainSequence.EQPStatus = eEQPSATUS.Idle;
@@ -43,7 +44,7 @@ namespace MaterialStorageManager.ViewModels
             }
         }
 
-        private void OnEvnetMonitorBtnChange(object sender, eEQPSATUS e)
+        private void OnEventMonitorBtnChange(object sender, eEQPSATUS e)
         {
             BTN_Status(e);
         }

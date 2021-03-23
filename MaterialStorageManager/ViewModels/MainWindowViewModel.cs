@@ -132,6 +132,8 @@ namespace MaterialStorageManager.ViewModels
 
         }
 
+
+
         private void _Finalize()
         {
             _log.Write(CmdLogType.prdt, $"Application을 종료합니다. [{mainSequence.Version}]");
